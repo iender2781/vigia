@@ -1,0 +1,45 @@
+# Entorno local para probar la plataforma sin tocar producción:
+#   PostgreSQL + Prometheus simulado (sirve la captura sintética de los tests) + plataforma.
+#   make dev  ->  http://localhost:8080   (sin autenticación)
+# Para usar una captura real, cambia el volumen de fakeprom por su directorio (series.json, values.json...).
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: contexto
+      POSTGRES_USER: contexto
+      POSTGRES_PASSWORD: contexto
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U contexto"]
+      interval: 3s
+      retries: 20
+  fakeprom:
+    image: golang:1.23-alpine
+    working_dir: /src
+    command: ["go", "run", "./tools/fakeprom", "-dir", "/captura", "-addr", ":9090"]
+    volumes:
+      - ../..:/src:ro
+      - ../../internal/contexto/engine/testdata/fixture:/captura:ro
+    environment: {GOFLAGS: -buildvcs=false, GOCACHE: /tmp/gocache, GOPATH: /tmp/gopath}
+  migrate:
+    build: {context: ../.., dockerfile: Dockerfile}
+    command: ["migrate"]
+    environment: &env
+      CONTEXTO_DATABASE_URL: postgres://contexto:contexto@postgres:5432/contexto?sslmode=disable
+      CONTEXTO_TENANT_ID: 11111111-2222-3333-4444-555555555555
+      CONTEXTO_TENANT_NAME: Desarrollo local
+      CONTEXTO_PROMETHEUS_URLS: http://fakeprom:9090
+      CONTEXTO_ALERTMANAGER_URL: http://fakeprom:9090
+      CONTEXTO_DISCOVERY_INTERVAL: 1m
+      CONTEXTO_AUTH_MODE: none
+      CONTEXTO_LOG_FORMAT: text
+    depends_on:
+      postgres: {condition: service_healthy}
+  contexto:
+    build: {context: ../.., dockerfile: Dockerfile}
+    command: ["serve", "--role", "all"]
+    environment: *env
+    ports: ["8080:8080", "8081:8081"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      fakeprom: {condition: service_started}

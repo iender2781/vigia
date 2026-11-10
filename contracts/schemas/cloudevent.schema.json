@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vigia/contracts/cloudevent.schema.json",
+  "title": "Sobre CloudEvents 1.0 (modo estructurado, JSON) usado en todos los mensajes",
+  "type": "object",
+  "required": ["specversion", "id", "source", "type", "time", "tenantid", "data"],
+  "properties": {
+    "specversion": {"const": "1.0"},
+    "id": {"type": "string", "minLength": 1, "description": "ULID o UUID único por mensaje (sirve para deduplicar)"},
+    "source": {"type": "string", "description": "Componente que publica: vigia/ingesta, vigia/motor, plataforma/correlator..."},
+    "type": {"type": "string", "pattern": "^es\\.vigia\\.[a-z_.]+\\.v[0-9]+$", "description": "Tipo con versión mayor al final"},
+    "time": {"type": "string", "format": "date-time"},
+    "subject": {"type": "string", "description": "Objeto del mensaje: alert/<fingerprint>, incident/<id>, ssii/<código>..."},
+    "tenantid": {"type": "string", "format": "uuid", "description": "UUID de la empresa en Vigía"},
+    "datacontenttype": {"const": "application/json"},
+    "data": {"type": "object"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,33 @@
+# Ajustes de descubrimiento. Ver ontology/README.md.
+exclude_jobs:
+  - acosv2
+same_host_classes:
+  - ESXi
+  - Host en cabina
+  - VM
+  - Nodo F5
+  - Nodo Veeam
+host_rewrite:
+  - pattern: ^[a-z]{2,6}_([a-z0-9-]+)$
+    replace: ${1}
+datastore_lun_bridge:
+  datastore_metric: vsphere_datastore_capacity_bytes
+  datastore_regex: "^(?P<site>S\\d\\d)(?P<code>CA[HS]\\d\\d)_(?P<org>[A-Za-z0-9]+)_.*?VC\\d\\d-(?P<core>.+)_(?P<idx>[0-9A-Fa-f]+)$"
+  datastore_size_metric: vsphere_datastore_capacity_bytes
+  lun_sources:
+    - metric: unity_lun_size_total_bytes
+      label: name
+      array_label: array
+      code_metric: unity_pool_size_total_bytes
+      code_from: instance
+      code_regex: "(s\\d\\d)-a-(cah\\d\\d)"
+      size_metric: unity_lun_size_total_bytes
+datastore_class: Datastore
+lun_class: LUN
+size_match_tolerance: 0.01
+ssii_attr: COD_SSII
+search_attrs:
+  - COD_SSII
+  - IP
+  - WWN
+  - Serie

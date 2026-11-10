@@ -1,0 +1,24 @@
+# Producción.
+image: {tag: "0.1.0"}
+tenant: {id: "REEMPLAZAR-UUID-EMPRESA", name: "Organización (pro)"}
+prometheus:
+  urls: [http://prometheus-0.monitoring.svc:9090, http://prometheus-1.monitoring.svc:9090]
+alertmanager: {url: http://alertmanager.monitoring.svc:9093}
+api: {replicas: 2}
+auth: {mode: proxy}
+ingress:
+  enabled: true
+  host: contexto.vigia.dominio
+  tls: {clusterIssuer: corp-ca}
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: "https://oauth2.vigia.dominio/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://oauth2.vigia.dominio/oauth2/start?rd=$escaped_request_uri"
+    nginx.ingress.kubernetes.io/auth-response-headers: X-Auth-Request-User,X-Auth-Request-Email
+monitoring: {serviceMonitor: {enabled: true}, prometheusRule: {enabled: true}}
+networkPolicy: {egressCIDRs: ["10.40.0.0/16"]}
+discovery:
+  replicas: 2
+  interval: 5m
+  resources:
+    requests: {cpu: 500m, memory: 1Gi}
+    limits: {memory: 4Gi}

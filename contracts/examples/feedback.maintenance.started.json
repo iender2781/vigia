@@ -1,0 +1,2 @@
+{"specversion":"1.0","id":"01JCB7T0000000000000000000","source":"vigia/motor","type":"es.vigia.feedback.maintenance.started.v1","time":"2026-11-12T21:00:00Z","subject":"maintenance/mnt-88","tenantid":"11111111-2222-3333-4444-555555555555",
+ "data":{"maintenance_id":"mnt-88","status":"started","starts_at":"2026-11-12T21:00:00Z","ends_at":"2026-11-12T23:00:00Z","services":["svc-almacenamiento"],"ci_ids":["5e6f7a8b9c0d1e2f3a4b5c6d"],"reason":"Actualización de firmware","change_ref":"CHG-1234","by":"mgarcia"}}

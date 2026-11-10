@@ -1,0 +1,112 @@
+# Valores por defecto del chart. Los de cada entorno van en el repositorio GitOps (infra-vigia).
+
+image:
+  repository: ghcr.io/iender2781/vigia-contexto
+  tag: ""                # por defecto, appVersion del chart
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+
+# Secreto (gestionado por External Secrets a partir de Vault) con las claves:
+#   database-url              cadena de conexión a PostgreSQL (obligatoria)
+#   api-tokens                tokens de API separados por comas (si auth.mode = token)
+#   prometheus-bearer-token   token para Prometheus (opcional)
+#   prometheus-basic-auth     usuario:contraseña para Prometheus (opcional)
+existingSecret: vigia-contexto-secrets
+
+tenant:
+  id: "00000000-0000-0000-0000-000000000001"   # UUID de la empresa en Vigía
+  name: "Organización"
+
+prometheus:
+  urls: []               # p. ej. [http://prometheus-0:9090, http://prometheus-1:9090]
+  insecureSkipVerify: false
+  timeout: 60s
+  concurrency: 4
+  matchersPerRequest: 20
+alertmanager:
+  url: ""                # opcional: alimenta las reglas con source: alerts (respaldo hasta la fase 2)
+
+discovery:
+  enabled: true
+  replicas: 2            # una líder (bloqueo en PostgreSQL) y otra en espera
+  interval: 5m
+  seriesLookback: 10m
+  staleAfterCycles: 3
+  retireAfter: 168h
+  eventRetentionMonths: 13
+  resources:
+    requests: {cpu: 250m, memory: 512Mi}
+    limits: {memory: 2Gi}
+
+api:
+  enabled: true
+  replicas: 2
+  resources:
+    requests: {cpu: 100m, memory: 128Mi}
+    limits: {memory: 512Mi}
+
+auth:
+  mode: proxy            # token | proxy | none
+  proxyHeader: X-Auth-Request-User
+
+log:
+  level: info
+  format: json
+
+# Ontología: va dentro de la imagen (/etc/contexto/ontology). Para probar cambios sin
+# publicar imagen, se puede montar un ConfigMap por directorio (core, packs, business).
+ontology:
+  overrideConfigMaps: {} # p. ej. {packs: contexto-ontology-packs}
+
+migrations:
+  enabled: true          # Job previo a cada instalación/actualización (hook de Helm y Argo CD)
+  backoffLimit: 2
+
+service:
+  type: ClusterIP
+  port: 8080
+  opsPort: 8081
+
+ingress:
+  enabled: false
+  className: nginx
+  host: contexto.vigia.dominio
+  annotations: {}        # p. ej. auth de oauth2-proxy: nginx.ingress.kubernetes.io/auth-url ...
+  tls:
+    enabled: true
+    secretName: ""       # vacío: contexto-tls
+    clusterIssuer: ""    # p. ej. corp-ca (cert-manager)
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+topologySpread:
+  enabled: true
+  topologyKey: topology.kubernetes.io/zone
+
+networkPolicy:
+  enabled: true
+  # Destinos de salida permitidos además de DNS (PostgreSQL, Prometheus, Alertmanager).
+  egressCIDRs: []        # p. ej. ["10.40.0.0/16"]
+  postgresPodLabels: {"cnpg.io/cluster": "vigia-pg"}
+  postgresNamespace: vigia-data
+  ingressNamespaces: [ingress-nginx]
+  monitoringNamespaces: [monitoring]
+
+monitoring:
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    labels: {}
+  prometheusRule:
+    enabled: false
+    labels: {}
+
+serviceAccount:
+  create: true
+  name: ""
+
+podAnnotations: {}
+nodeSelector: {}
+tolerations: []

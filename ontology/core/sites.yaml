@@ -1,0 +1,15 @@
+# Sedes y cómo deducirlas de nombres y atributos.
+names:
+  S00: CICA
+  S01: ZOCO
+patterns:
+  - site: CICA
+    pattern: (?i)(cica|^s00|[_-]s00)
+  - site: ZOCO
+    pattern: (?i)(zoco|^s01|[_-]s01)
+ignore_attrs:
+  - Réplica con
+  - Ubicación 1
+  - Ubicación 2
+  - Activa en
+  - Preferida

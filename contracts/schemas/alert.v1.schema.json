@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vigia/contracts/alert.v1.schema.json",
+  "title": "es.vigia.alert.fired.v1 / es.vigia.alert.resolved.v1 — alerta normalizada por la ingesta de Vigía",
+  "type": "object",
+  "required": ["alert_id", "fingerprint", "status", "labels", "severity", "source", "starts_at"],
+  "properties": {
+    "alert_id": {"type": "string", "description": "Identificador de la alerta en Vigía"},
+    "fingerprint": {"type": "string", "description": "Fingerprint de Alertmanager (clave común entre ambos proyectos)"},
+    "status": {"enum": ["firing", "resolved"]},
+    "labels": {"type": "object", "additionalProperties": {"type": "string"}},
+    "annotations": {"type": "object", "additionalProperties": {"type": "string"}},
+    "severity": {"enum": ["critica", "alta", "aviso", "info"], "description": "Severidad normalizada por Vigía"},
+    "service_key": {"type": "string", "description": "Servicio de Vigía por el que entró (clave de integración)"},
+    "source": {"enum": ["alertmanager", "grafana", "generic", "email"]},
+    "starts_at": {"type": "string", "format": "date-time"},
+    "ends_at": {"type": "string", "format": "date-time"},
+    "generator_url": {"type": "string"}
+  },
+  "additionalProperties": false
+}

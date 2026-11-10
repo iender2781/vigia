@@ -1,0 +1,87 @@
+{{- if .Values.discovery.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "contexto.fullname" . }}-discovery
+  labels:
+    {{- include "contexto.labels" . | nindent 4 }}
+    app.kubernetes.io/component: discovery
+spec:
+  replicas: {{ .Values.discovery.replicas }}
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      {{- include "contexto.selector" . | nindent 6 }}
+      app.kubernetes.io/component: discovery
+  template:
+    metadata:
+      labels:
+        {{- include "contexto.selector" . | nindent 8 }}
+        app.kubernetes.io/component: discovery
+      annotations:
+        checksum/env: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "contexto.serviceAccount" . }}
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        fsGroup: 65532
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: contexto
+          image: {{ include "contexto.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["serve", "--role", "discovery"]
+          envFrom:
+            - configMapRef: {name: {{ include "contexto.fullname" . }}-env}
+          env:
+            {{- include "contexto.env" . | nindent 12 }}
+          ports:
+            - {name: ops, containerPort: {{ .Values.service.opsPort }}}
+          readinessProbe:
+            httpGet: {path: /readyz, port: ops}
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet: {path: /healthz, port: ops}
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.discovery.resources | nindent 12 }}
+          securityContext:
+            {{- include "contexto.securityContext" . | nindent 12 }}
+          volumeMounts:
+            - {name: tmp, mountPath: /tmp}
+            {{- include "contexto.ontologyMounts" . | nindent 12 }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        {{- include "contexto.ontologyVolumes" . | nindent 8 }}
+      {{- if .Values.topologySpread.enabled }}
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: {{ .Values.topologySpread.topologyKey }}
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              {{- include "contexto.selector" . | nindent 14 }}
+              app.kubernetes.io/component: discovery
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

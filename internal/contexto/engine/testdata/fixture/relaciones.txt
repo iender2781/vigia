@@ -1,0 +1,5 @@
+# Relaciones manuales de prueba
+Vsys_PA:CEFTA => F5:EMP
+Vsys_PA:OTRO@CICA => F5:ADA
+Vsys_PA:NOEXISTE => F5:EMP
+línea mal formada
