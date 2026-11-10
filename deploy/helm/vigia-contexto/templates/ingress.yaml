@@ -48,4 +48,33 @@ spec:
     trustForwardHeader: true
     authResponseHeaders:
       {{- toYaml .Values.ingress.forwardAuth.responseHeaders | nindent 6 }}
+---
+# Rutas de oauth2-proxy (/oauth2/start, /oauth2/callback...) en el mismo host, sin el middleware.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "contexto.fullname" . }}-oauth2
+  labels:
+    {{- include "contexto.labels" . | nindent 4 }}
+  {{- if .Values.ingress.tls.clusterIssuer }}
+  annotations:
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.tls.clusterIssuer }}
+  {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- if .Values.ingress.tls.enabled }}
+  tls:
+    - hosts: [{{ .Values.ingress.host | quote }}]
+      secretName: {{ default "contexto-tls" .Values.ingress.tls.secretName }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.ingress.host | quote }}
+      http:
+        paths:
+          - path: /oauth2
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.ingress.forwardAuth.service.name }}
+                port: {number: {{ .Values.ingress.forwardAuth.service.port }}}
 {{- end }}
