@@ -11,7 +11,7 @@
 #            passwordSecret: {name: contexto-db-credentials}
 #
 # 2) Secreto con la contraseña del rol (tipo basic-auth), sincronizado desde Vault:
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: contexto-db-credentials

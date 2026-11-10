@@ -69,9 +69,15 @@ service:
 
 ingress:
   enabled: false
-  className: nginx
+  className: traefik     # RKE2 1.36+ trae Traefik (ingress-nginx se retiró en marzo de 2026)
   host: contexto.vigia.dominio
-  annotations: {}        # p. ej. auth de oauth2-proxy: nginx.ingress.kubernetes.io/auth-url ...
+  annotations: {}
+  # Autenticación con oauth2-proxy: si hay address, el chart crea un Middleware ForwardAuth de Traefik
+  # y lo enlaza al Ingress. oauth2-proxy debe arrancar con --reverse-proxy, --set-xauthrequest y
+  # --upstream=static://202 para que redirija al inicio de sesión.
+  forwardAuth:
+    address: ""          # p. ej. http://oauth2-proxy.vigia-app.svc/
+    responseHeaders: [X-Auth-Request-User, X-Auth-Request-Email]
   tls:
     enabled: true
     secretName: ""       # vacío: contexto-tls
@@ -91,7 +97,7 @@ networkPolicy:
   egressCIDRs: []        # p. ej. ["10.40.0.0/16"]
   postgresPodLabels: {"cnpg.io/cluster": "vigia-pg"}
   postgresNamespace: vigia-data
-  ingressNamespaces: [ingress-nginx]
+  ingressNamespaces: [kube-system]   # donde corre Traefik en RKE2
   monitoringNamespaces: [monitoring]
 
 monitoring:

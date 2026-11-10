@@ -11,9 +11,6 @@ ingress:
   enabled: true
   host: contexto.pre.vigia.dominio
   tls: {clusterIssuer: corp-ca}
-  annotations:
-    nginx.ingress.kubernetes.io/auth-url: "https://oauth2.pre.vigia.dominio/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://oauth2.pre.vigia.dominio/oauth2/start?rd=$escaped_request_uri"
-    nginx.ingress.kubernetes.io/auth-response-headers: X-Auth-Request-User,X-Auth-Request-Email
+  forwardAuth: {address: "http://oauth2-proxy.vigia-app.svc/"}
 monitoring: {serviceMonitor: {enabled: true}, prometheusRule: {enabled: true}}
 networkPolicy: {egressCIDRs: ["10.40.0.0/16"]}
