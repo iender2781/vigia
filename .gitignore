@@ -1,0 +1,9 @@
+/bin/
+node_modules/
+internal/contexto/web/dist/*
+!internal/contexto/web/dist/.gitkeep
+*.test
+*.out
+.DS_Store
+.idea/
+.vscode/
