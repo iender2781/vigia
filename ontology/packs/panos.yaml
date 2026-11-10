@@ -1,0 +1,234 @@
+# Reglas de Firewalls.
+pack: panos
+technology: Firewalls
+description: Importado de config_junta.json. Revisar y documentar cada regla.
+rules:
+  - id: panos-device-info
+    order: 270
+    metric: panos_device_info
+    computed:
+      - name: fw_ip
+        first:
+          - exported_instance
+          - instance
+        pattern: "^\\[?([^\\]:/]+)"
+      - name: fw_site
+        map:
+          from: fw_ip
+          patterns:
+            - pattern: "^10\\.47\\.208\\.1[12]$"
+              value: CICA
+            - pattern: "^10\\.47\\.208\\.13[12]$"
+              value: ZOCO
+          default: Sin sede
+      - name: fw_cluster
+        format: Firewalls PA {fw_site}
+    cis:
+      - alias: fw
+        class: Firewall PA
+        key:
+          - fw_ip
+        name: hostname
+        set_name: true
+        attrs:
+          IP: fw_ip
+          Modelo: model
+          Multi-vsys: multi_vsys
+          Sede: fw_site
+          Serie: serial
+          Versión PAN-OS: sw_version
+      - alias: cl
+        class: Clúster HA PA
+        key:
+          - fw_site
+        name: fw_cluster
+        attrs:
+          Sede: fw_site
+    rels:
+      - from: fw
+        rel: miembro de
+        to: cl
+  - id: panos-ha-local-state
+    order: 280
+    metric: panos_ha_local_state
+    computed:
+      - name: fw_ip
+        first:
+          - exported_instance
+          - instance
+        pattern: "^\\[?([^\\]:/]+)"
+      - name: fw_site
+        map:
+          from: fw_ip
+          patterns:
+            - pattern: "^10\\.47\\.208\\.1[12]$"
+              value: CICA
+            - pattern: "^10\\.47\\.208\\.13[12]$"
+              value: ZOCO
+          default: Sin sede
+      - name: fw_cluster
+        format: Firewalls PA {fw_site}
+      - name: ha
+        format: "{state} ({mode})"
+    cis:
+      - alias: fw
+        class: Firewall PA
+        key:
+          - fw_ip
+        name: instance
+        attrs:
+          Estado HA: ha
+      - alias: cl
+        class: Clúster HA PA
+        key:
+          - fw_site
+        name: fw_cluster
+        attrs:
+          Sede: fw_site
+    rels:
+      - from: fw
+        rel: miembro de
+        to: cl
+  - id: panos-ha-peer-state
+    order: 290
+    metric: panos_ha_peer_state
+    computed:
+      - name: fw_ip
+        first:
+          - exported_instance
+          - instance
+        pattern: "^\\[?([^\\]:/]+)"
+      - name: fw_site
+        map:
+          from: fw_ip
+          patterns:
+            - pattern: "^10\\.47\\.208\\.1[12]$"
+              value: CICA
+            - pattern: "^10\\.47\\.208\\.13[12]$"
+              value: ZOCO
+          default: Sin sede
+      - name: fw_cluster
+        format: Firewalls PA {fw_site}
+      - name: pair
+        sorted:
+          - fw_ip
+          - peer_mgmt_ip
+        sep: " / "
+    cis:
+      - alias: cl
+        class: Clúster HA PA
+        key:
+          - fw_site
+        name: fw_cluster
+        attrs:
+          Pareja HA: pair
+  - id: panos-vsys-info
+    order: 300
+    metric: panos_vsys_info
+    computed:
+      - name: fw_ip
+        first:
+          - exported_instance
+          - instance
+        pattern: "^\\[?([^\\]:/]+)"
+      - name: fw_site
+        map:
+          from: fw_ip
+          patterns:
+            - pattern: "^10\\.47\\.208\\.1[12]$"
+              value: CICA
+            - pattern: "^10\\.47\\.208\\.13[12]$"
+              value: ZOCO
+          default: Sin sede
+      - name: fw_cluster
+        format: Firewalls PA {fw_site}
+    cis:
+      - alias: vs
+        class: Vsys PA
+        key:
+          - fw_site
+          - display_name
+        attrs:
+          Sede: fw_site
+          Vsys: vsys
+      - alias: fw
+        class: Firewall PA
+        key:
+          - fw_ip
+        name: instance
+      - alias: cl
+        class: Clúster HA PA
+        key:
+          - fw_site
+        name: fw_cluster
+        attrs:
+          Sede: fw_site
+    rels:
+      - from: vs
+        rel: se ejecuta en
+        to: fw
+      - from: vs
+        rel: definido en
+        to: cl
+  - id: panos-interface-physical-up
+    order: 310
+    metric: panos_interface_physical_up
+    computed:
+      - name: fw_ip
+        first:
+          - exported_instance
+          - instance
+        pattern: "^\\[?([^\\]:/]+)"
+      - name: fw_site
+        map:
+          from: fw_ip
+          patterns:
+            - pattern: "^10\\.47\\.208\\.1[12]$"
+              value: CICA
+            - pattern: "^10\\.47\\.208\\.13[12]$"
+              value: ZOCO
+          default: Sin sede
+    cis:
+      - alias: if
+        class: Interfaz PA
+        key:
+          - fw_ip
+          - interface
+        attrs:
+          Dúplex: duplex
+          Estado: state
+      - alias: fw
+        class: Firewall PA
+        key:
+          - fw_ip
+        name: instance
+    rels:
+      - from: if
+        rel: de
+        to: fw
+  - id: panos-alertas-job
+    order: 700
+    source: alerts
+    where:
+      job: (?i).*panos.*
+    computed:
+      - name: fw_ip
+        first:
+          - exported_instance
+          - instance
+        pattern: "^\\[?([^\\]:/]+)"
+      - name: fw_site
+        map:
+          from: fw_ip
+          patterns:
+            - pattern: "^10\\.47\\.208\\.1[12]$"
+              value: CICA
+            - pattern: "^10\\.47\\.208\\.13[12]$"
+              value: ZOCO
+          default: Sin sede
+    cis:
+      - alias: fw
+        class: Firewall PA
+        key:
+          - fw_ip
+        name: instance

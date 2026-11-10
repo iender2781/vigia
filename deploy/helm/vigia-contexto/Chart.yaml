@@ -1,0 +1,7 @@
+apiVersion: v2
+name: vigia-contexto
+description: Plataforma de contexto de Vigía (CMDB, topología y RCA sobre Prometheus) — fases 0-1
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords: [cmdb, prometheus, topologia, vigia]

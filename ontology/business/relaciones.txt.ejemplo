@@ -1,0 +1,7 @@
+# Relaciones manuales (formato heredado del correlador Python).
+# Copiar como relaciones.txt (o pasar las entradas a manual_relations.yaml, campo entries).
+#
+#   Prefijo:Nombre => Prefijo:Nombre        el lado derecho depende del izquierdo
+#   Un nombre puede llevar sede: Vsys_PA:CENTRAL@CICA
+#
+# Vsys_PA:CEFTA => F5:EMP

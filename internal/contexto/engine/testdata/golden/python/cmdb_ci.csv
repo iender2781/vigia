@@ -1,0 +1,212 @@
+id;tipo;nombre;atributos;metricas
+Cabina|CICA;Cabina;ORG1_CORE_01;Modelo=model-a | Serie=serial-a | Versión=12.1 | Ubicación=/fs/a | WWN=6008c0e1aabbccdd0011223344556677;alertas,oceanstor_host_info,oceanstor_pool_capacity_bytes,oceanstor_system_info,oceanstor_vstore_info
+Cabina|ZOCO;Cabina;ORG1_OTRA_02;Modelo=model-b | Serie=serial-b | Versión=12.1 | Ubicación=/fs/b | WWN=6008c0e1aabbccdd0011223344556678;alertas,oceanstor_host_info,oceanstor_pool_capacity_bytes,oceanstor_system_info,oceanstor_vstore_info
+Cabina|vcnppu01.junta.es:443;Cabina;S00ACAS21;Fabricante=IBM | Modelo=product_name-a | Versión=code_level-a | ID sistema=system_id-a | Topología=topology-a | Gestión=vcnppu01.junta.es:443 | Réplica con=partner-a (available, type-a);alertas,ibm_flashsystem_array_healthy,ibm_flashsystem_battery_healthy,ibm_flashsystem_enclosure_healthy,ibm_flashsystem_host_cluster_healthy,ibm_flashsystem_host_healthy,ibm_flashsystem_node_healthy,ibm_flashsystem_partition_info,ibm_flashsystem_partnership_healthy,ibm_flashsystem_pool_healthy,ibm_flashsystem_psu_healthy,ibm_flashsystem_system_info
+Cabina|10.47.208.131:9100;Cabina;S01ACAS21;Fabricante=IBM | Modelo=product_name-b | Versión=code_level-b | ID sistema=system_id-b | Topología=topology-b | Gestión=10.47.208.131:9100 | Réplica con=partner-a (available, type-a);alertas,ibm_flashsystem_array_healthy,ibm_flashsystem_battery_healthy,ibm_flashsystem_enclosure_healthy,ibm_flashsystem_host_cluster_healthy,ibm_flashsystem_host_healthy,ibm_flashsystem_node_healthy,ibm_flashsystem_partition_info,ibm_flashsystem_partnership_healthy,ibm_flashsystem_pool_healthy,ibm_flashsystem_psu_healthy,ibm_flashsystem_system_info
+Cabina|10.47.208.11:9100;Cabina;S01ACAS21;Fabricante=IBM | Modelo=product_name-b | Versión=code_level-b | ID sistema=system_id-b | Topología=topology-b | Gestión=10.47.208.11:9100 | Réplica con=partner-b (offline, type-b);alertas,ibm_flashsystem_array_healthy,ibm_flashsystem_battery_healthy,ibm_flashsystem_enclosure_healthy,ibm_flashsystem_host_cluster_healthy,ibm_flashsystem_host_healthy,ibm_flashsystem_node_healthy,ibm_flashsystem_partition_info,ibm_flashsystem_partnership_healthy,ibm_flashsystem_pool_healthy,ibm_flashsystem_psu_healthy,ibm_flashsystem_system_info
+Cabina|UNITY-1-CICA;Cabina;UNITY-1-CICA;Gestión=s00-a-cah01.junta.es;unity_lun_size_total_bytes,unity_pool_size_total_bytes
+Cabina|chassis;Cabina;chassis;;alertas
+Cabina|unity-1-cica;Cabina;unity-1-cica;Gestión=10.47.208.11:9100 | Fabricante=vendor-a;alertas,unity_filesystem_size_total_bytes,unity_lun_size_total_bytes,unity_pool_size_total_bytes
+Cabina|unity-2-zoco;Cabina;unity-2-zoco;Gestión=vcnppu01.junta.es:443 | Fabricante=vendor-b;alertas,unity_filesystem_size_total_bytes,unity_lun_size_total_bytes,unity_pool_size_total_bytes
+Chasis F5|s00-velos-01;Chasis F5;s00-velos-01;Modelo=model-a | Serie=serial-a | Sede=CICA;alertas,f5os_component_info,f5os_memory_used_bytes,f5os_tenant_info
+Chasis F5|s01-velos-01;Chasis F5;s01-velos-01;Modelo=model-b | Serie=serial-b | Sede=ZOCO;alertas,f5os_component_info,f5os_memory_used_bytes,f5os_tenant_info
+Chassis partition F5|ORG1_CORE_01;Chassis partition F5;ORG1_CORE_01;;alertas,f5os_memory_used_bytes
+Chassis partition F5|ORG1_OTRA_02;Chassis partition F5;ORG1_OTRA_02;;alertas,f5os_memory_used_bytes
+Chassis partition F5|ORG2_DATA_0A;Chassis partition F5;ORG2_DATA_0A;;alertas,f5os_memory_used_bytes
+Clúster HA PA|CICA;Clúster HA PA;Firewalls PA CICA;Sede=CICA | Pareja HA=10.47.208.12 / 10.47.208.12;panos_device_info,panos_ha_local_state,panos_ha_peer_state,panos_vsys_info
+Clúster HA PA|Sin sede;Clúster HA PA;Firewalls PA Sin sede;Sede=Sin sede | Pareja HA=10.47.208.132 / vcnppu01.junta.es;panos_device_info,panos_ha_local_state,panos_ha_peer_state,panos_vsys_info
+Clúster HA PA|ZOCO;Clúster HA PA;Firewalls PA ZOCO;Pareja HA=10.47.208.131 / 10.47.208.132 | Sede=ZOCO;panos_ha_peer_state,panos_vsys_info
+Clúster vSphere|vc05|CL-ORACLE;Clúster vSphere;CL-ORACLE;;vsphere_cluster_hosts,vsphere_host_overall_status
+Clúster vSphere|vcnppu01|CL-ORACLE;Clúster vSphere;CL-ORACLE;;vmware_vm_power_state
+Clúster vSphere|10|CL-ORACLE;Clúster vSphere;CL-ORACLE;;vmware_vm_power_state
+Clúster vSphere|vc04|CL-PROD;Clúster vSphere;CL-PROD;;vsphere_cluster_hosts,vsphere_host_overall_status
+Clúster vSphere|10|CL-PROD;Clúster vSphere;CL-PROD;;vmware_vm_power_state
+Componente F5|s00-velos-01|blade-1;Componente F5;blade-1;Modelo=model-a | Serie=serial-a | Tipo=type-a;f5os_component_info,f5os_memory_used_bytes
+Componente F5|s01-velos-01|blade-2;Componente F5;blade-2;Modelo=model-b | Serie=serial-b | Tipo=type-b;f5os_component_info,f5os_memory_used_bytes
+Componente F5|s01-velos-01|chassis;Componente F5;chassis;Modelo=model-b | Serie=serial-b;alertas,f5os_component_info
+Componente F5|s00-velos-01|chassis;Componente F5;chassis;Modelo=model-a | Serie=serial-a;alertas,f5os_component_info
+Componente de cabina|10.47.208.131:9100|Array mdisk-a;Componente de cabina;Array mdisk-a;Tipo=Array RAID | Estado=status-a | RAID=raid_level-a | Estado RAID=raid_status-a | Tier=tier-a;ibm_flashsystem_array_healthy
+Componente de cabina|10.47.208.11:9100|Array mdisk-a;Componente de cabina;Array mdisk-a;Tipo=Array RAID | Estado=status-a | RAID=raid_level-a | Estado RAID=raid_status-a | Tier=tier-a;ibm_flashsystem_array_healthy
+Componente de cabina|10.47.208.11:9100|Array mdisk-b;Componente de cabina;Array mdisk-b;Tipo=Array RAID | Estado=status-b | RAID=raid_level-b | Estado RAID=raid_status-b | Tier=tier-b;ibm_flashsystem_array_healthy
+Componente de cabina|vcnppu01.junta.es:443|Array mdisk-b;Componente de cabina;Array mdisk-b;Tipo=Array RAID | Estado=status-b | RAID=raid_level-b | Estado RAID=raid_status-b | Tier=tier-b;ibm_flashsystem_array_healthy
+Componente de cabina|10.47.208.131:9100|Array mdisk-b;Componente de cabina;Array mdisk-b;Tipo=Array RAID;ibm_flashsystem_array_healthy
+Componente de cabina|vcnppu01.junta.es:443|Batería battery_id-a;Componente de cabina;Batería battery_id-a;Tipo=Batería | Estado=status-a | Carga=charging_status-a | Ubicación=/fs/a;ibm_flashsystem_battery_healthy
+Componente de cabina|10.47.208.131:9100|Batería battery_id-a;Componente de cabina;Batería battery_id-a;Tipo=Batería | Estado=status-a | Carga=charging_status-a | Ubicación=/fs/a;ibm_flashsystem_battery_healthy
+Componente de cabina|10.47.208.11:9100|Batería battery_id-b;Componente de cabina;Batería battery_id-b;Tipo=Batería | Estado=status-b | Carga=charging_status-b | Ubicación=/fs/b;ibm_flashsystem_battery_healthy
+Componente de cabina|vcnppu01.junta.es:443|Batería battery_id-b;Componente de cabina;Batería battery_id-b;Tipo=Batería | Estado=status-b | Carga=charging_status-b | Ubicación=/fs/b;ibm_flashsystem_battery_healthy
+Componente de cabina|10.47.208.11:9100|Enclosure enclosure_id-a;Componente de cabina;Enclosure enclosure_id-a;Tipo=Enclosure | Estado=status-a | MTM=mtm-a | Serie=serial-a | Función=type-a;ibm_flashsystem_enclosure_healthy
+Componente de cabina|vcnppu01.junta.es:443|Enclosure enclosure_id-a;Componente de cabina;Enclosure enclosure_id-a;Tipo=Enclosure | Estado=status-a | MTM=mtm-a | Serie=serial-a | Función=type-a;ibm_flashsystem_enclosure_healthy
+Componente de cabina|10.47.208.131:9100|Enclosure enclosure_id-b;Componente de cabina;Enclosure enclosure_id-b;Tipo=Enclosure | Estado=status-b | MTM=mtm-b | Serie=serial-b | Función=type-b;ibm_flashsystem_enclosure_healthy
+Componente de cabina|10.47.208.11:9100|Enclosure enclosure_id-b;Componente de cabina;Enclosure enclosure_id-b;Tipo=Enclosure | Estado=status-b | MTM=mtm-b | Serie=serial-b | Función=type-b;ibm_flashsystem_enclosure_healthy
+Componente de cabina|vcnppu01.junta.es:443|Fuente enclosure_id-a-psu_id-a;Componente de cabina;Fuente enclosure_id-a-psu_id-a;Tipo=Fuente de alimentación | Estado=status-a;ibm_flashsystem_psu_healthy
+Componente de cabina|10.47.208.131:9100|Fuente enclosure_id-a-psu_id-a;Componente de cabina;Fuente enclosure_id-a-psu_id-a;Tipo=Fuente de alimentación | Estado=status-a;ibm_flashsystem_psu_healthy
+Componente de cabina|10.47.208.131:9100|Fuente enclosure_id-b-psu_id-b;Componente de cabina;Fuente enclosure_id-b-psu_id-b;Tipo=Fuente de alimentación | Estado=status-b;ibm_flashsystem_psu_healthy
+Componente de cabina|10.47.208.11:9100|Fuente enclosure_id-b-psu_id-b;Componente de cabina;Fuente enclosure_id-b-psu_id-b;Tipo=Fuente de alimentación | Estado=status-b;ibm_flashsystem_psu_healthy
+Componente de cabina|10.47.208.11:9100|Nodo 10.1.1.10;Componente de cabina;Nodo 10.1.1.10;Tipo=Nodo | Estado=status-a | Nodo de configuración=config_node-a | I/O group=io_group-a;ibm_flashsystem_node_healthy
+Componente de cabina|vcnppu01.junta.es:443|Nodo 10.1.1.10;Componente de cabina;Nodo 10.1.1.10;Tipo=Nodo | Estado=status-a | Nodo de configuración=config_node-a | I/O group=io_group-a;ibm_flashsystem_node_healthy
+Componente de cabina|vcnppu01.junta.es:443|Nodo ccobuz38;Componente de cabina;Nodo ccobuz38;Tipo=Nodo | Estado=status-b | Nodo de configuración=config_node-b | I/O group=io_group-b;ibm_flashsystem_node_healthy
+Componente de cabina|10.47.208.131:9100|Nodo ccobuz38;Componente de cabina;Nodo ccobuz38;Tipo=Nodo | Estado=status-b | Nodo de configuración=config_node-b | I/O group=io_group-b;ibm_flashsystem_node_healthy
+Datastore|vc04|S00CAH01_ORG1_X_VC04-CORE_01;Datastore;S00CAH01_ORG1_X_VC04-CORE_01;;vsphere_datastore_capacity_bytes,vsphere_vm_datastore_info
+Datastore|vc05|S00CAH01_ORG1_X_VC04-CORE_01;Datastore;S00CAH01_ORG1_X_VC04-CORE_01;;vsphere_vm_datastore_info
+Datastore|10|S00CAH01_ORG1_X_VC04-CORE_01;Datastore;S00CAH01_ORG1_X_VC04-CORE_01;;vmware_datastore_capacity_size,vmware_vm_power_state
+Datastore|vc04|S00CAH01_ORG7_Y_VC04-DATA_0A;Datastore;S00CAH01_ORG7_Y_VC04-DATA_0A;;vsphere_datastore_capacity_bytes
+Datastore|vc05|S01CAS01_ORG2_Y_VC04-DATA_0A;Datastore;S01CAS01_ORG2_Y_VC04-DATA_0A;;vsphere_datastore_capacity_bytes,vsphere_vm_datastore_info
+Datastore|vcnppu01|S01CAS01_ORG2_Y_VC04-DATA_0A;Datastore;S01CAS01_ORG2_Y_VC04-DATA_0A;;vmware_datastore_capacity_size,vmware_vm_power_state
+Datastore|10|S01CAS01_ORG2_Y_VC04-DATA_0A;Datastore;S01CAS01_ORG2_Y_VC04-DATA_0A;;vmware_datastore_capacity_size,vmware_vm_power_state
+Datastore|vc04|S09CAH09_ORG1_X_VC04-CORE_01;Datastore;S09CAH09_ORG1_X_VC04-CORE_01;;vsphere_datastore_capacity_bytes
+Datastore|vc04|local-ds;Datastore;local-ds;;vsphere_datastore_capacity_bytes,vsphere_vm_datastore_info
+ESXi|S00EHSES48;ESXi;S00EHSES48;Modelo=model-b | Fabricante=vendor-b | Versión=full_name-b;vsphere_host_hardware_info,vsphere_host_overall_status,vsphere_host_product_info,vsphere_vm_power_state
+ESXi|h;ESXi;h;;vsphere_vm_power_state
+ESXi|s00e-hses-48.junta.es;ESXi;s00e-hses-48.junta.es;Modelo=model-b | Fabricante=vendor-b | Versión=full_name-a;vmware_vm_power_state,vsphere_host_hardware_info,vsphere_host_overall_status,vsphere_host_product_info,vsphere_vm_power_state
+ESXi|s01e-hses-12.junta.es;ESXi;s01e-hses-12.junta.es;Modelo=model-a | Fabricante=vendor-a | Versión=full_name-a;vmware_vm_power_state,vsphere_host_hardware_info,vsphere_host_overall_status,vsphere_host_product_info,vsphere_vm_power_state
+Filesystem|CICA|/fs/a;Filesystem;/fs/a;;alertas
+Filesystem|ZOCO|/fs/b;Filesystem;/fs/b;;alertas
+Filesystem|ZOCO|FS_B;Filesystem;FS_B;;oceanstor_filesystem_info
+Filesystem|CICA|FS_NFS_E_ALFRESCO;Filesystem;FS_NFS_E_ALFRESCO;;oceanstor_filesystem_info
+Filesystem|unity-2-zoco|ORG1_CORE_01;Filesystem;ORG1_CORE_01;;unity_filesystem_size_total_bytes
+Filesystem|unity-2-zoco|ORG1_OTRA_02;Filesystem;ORG1_OTRA_02;;unity_filesystem_size_total_bytes
+Filesystem|unity-1-cica|ORG2_DATA_0A;Filesystem;ORG2_DATA_0A;;unity_filesystem_size_total_bytes
+Filesystem|unity-2-zoco|chassis;Filesystem;chassis;;alertas
+Filesystem|unity-1-cica|chassis;Filesystem;chassis;;alertas
+Firewall PA|10.47.208.131;Firewall PA;10.47.208.131:9100;;panos_interface_physical_up,panos_vsys_info
+Firewall PA|10.47.208.12;Firewall PA;PA-CICA-1;IP=10.47.208.12 | Modelo=model-a | Serie=serial-a | Versión PAN-OS=sw_version-a | Multi-vsys=multi_vsys-a | Sede=CICA | Estado HA=available (active-passive);alertas,panos_device_info,panos_ha_local_state,panos_interface_physical_up,panos_vsys_info
+Firewall PA|10.47.208.11;Firewall PA;PA-ZOCO-1;IP=10.47.208.11 | Modelo=model-b | Serie=serial-b | Versión PAN-OS=sw_version-b | Multi-vsys=multi_vsys-b | Sede=CICA | Estado HA=offline (active-passive);alertas,panos_device_info,panos_ha_local_state,panos_interface_physical_up,panos_vsys_info
+Firewall PA|vcnppu01.junta.es;Firewall PA;PA-ZOCO-1;IP=vcnppu01.junta.es | Modelo=model-b | Serie=serial-b | Versión PAN-OS=sw_version-b | Multi-vsys=multi_vsys-b | Sede=Sin sede | Estado HA=offline (active-passive);alertas,panos_device_info,panos_ha_local_state,panos_vsys_info
+Host en cabina|ZOCO|S00EHSES48;Host en cabina;S00EHSES48;;oceanstor_host_info,oceanstor_host_lun_info
+Host en cabina|vcnppu01.junta.es:443|S00EHSES48;Host en cabina;S00EHSES48;Estado=status-a | Protocolo=protocol-a | Partición=Common;ibm_flashsystem_host_healthy,ibm_flashsystem_lun_mapping
+Host en cabina|10.47.208.11:9100|chassis;Host en cabina;chassis;;alertas
+Host en cabina|10.47.208.131:9100|chassis;Host en cabina;chassis;;alertas
+Host en cabina|vcnppu01.junta.es:443|chassis;Host en cabina;chassis;;alertas
+Host en cabina|ZOCO|s00e-hses-48.junta.es;Host en cabina;s00e-hses-48.junta.es;;oceanstor_host_info
+Host en cabina|CICA|s00e-hses-48.junta.es;Host en cabina;s00e-hses-48.junta.es;;oceanstor_host_lun_info
+Host en cabina|10.47.208.11:9100|s00e-hses-48.junta.es;Host en cabina;s00e-hses-48.junta.es;Estado=status-b | Protocolo=protocol-b | Partición=PART_HA_1;ibm_flashsystem_host_healthy,ibm_flashsystem_lun_mapping
+Host en cabina|CICA|s01e-hses-12.junta.es;Host en cabina;s01e-hses-12.junta.es;;oceanstor_host_info,oceanstor_host_lun_info
+Host en cabina|10.47.208.131:9100|s01e-hses-12.junta.es;Host en cabina;s01e-hses-12.junta.es;Estado=status-b | Protocolo=protocol-b | Partición=SANDETEL_PRO;ibm_flashsystem_host_healthy,ibm_flashsystem_lun_mapping
+Host group|10.47.208.11:9100|HC_PRO;Host group;HC_PRO;Estado=status-a;alertas,ibm_flashsystem_host_cluster_healthy
+Host group|vcnppu01.junta.es:443|HC_PRO;Host group;HC_PRO;Estado=status-a;alertas,ibm_flashsystem_host_cluster_healthy,ibm_flashsystem_host_healthy
+Host group|10.47.208.131:9100|HC_PRO;Host group;HC_PRO;;ibm_flashsystem_host_healthy
+Host group|ZOCO|HG_PRO;Host group;HG_PRO;;oceanstor_host_info,oceanstor_mapping_view_info
+Host group|CICA|HG_TST;Host group;HG_TST;;oceanstor_host_info,oceanstor_mapping_view_info
+Host group|10.47.208.131:9100|HG_TST;Host group;HG_TST;Estado=status-b;alertas,ibm_flashsystem_host_cluster_healthy,ibm_flashsystem_host_healthy
+Host group|10.47.208.11:9100|HG_TST;Host group;HG_TST;;alertas,ibm_flashsystem_host_healthy
+Host group|vcnppu01.junta.es:443|chassis;Host group;chassis;;alertas
+Host group|10.47.208.11:9100|chassis;Host group;chassis;;alertas
+Host group|10.47.208.131:9100|chassis;Host group;chassis;;alertas
+Infraestructura Veeam|CICA;Infraestructura Veeam;Veeam CICA;Sede=CICA;oceanstor_lun_info,veeam_component_info,veeam_service_state
+Infraestructura Veeam|ZOCO;Infraestructura Veeam;Veeam ZOCO;Sede=ZOCO;veeam_component_info,veeam_service_state
+Interfaz PA|10.47.208.12|ethernet1/1;Interfaz PA;ethernet1/1;Estado=available | Dúplex=duplex-a;panos_interface_physical_up
+Interfaz PA|10.47.208.131|ethernet1/2;Interfaz PA;ethernet1/2;Estado=offline | Dúplex=duplex-b;panos_interface_physical_up
+LUN|ZOCO|LUN_00_REPO-VB-vbhard01_1;LUN;LUN_00_REPO-VB-vbhard01_1;WWN=6008c0e1aabbccdd0011223344556678 | Asignación=alloc_type-b;oceanstor_lun_info,oceanstor_lungroup_member_info
+LUN|CICA|LUN_00_REPO-VB-vbhard01_1;LUN;LUN_00_REPO-VB-vbhard01_1;;oceanstor_host_lun_info,oceanstor_lun_info
+LUN|ZOCO|LUN_A;LUN;LUN_A;WWN=6008c0e1aabbccdd0011223344556678 | Asignación=alloc_type-b;oceanstor_host_lun_info,oceanstor_lun_info,oceanstor_lungroup_member_info
+LUN|CICA|LUN_A;LUN;LUN_A;;oceanstor_host_lun_info,oceanstor_lungroup_member_info
+LUN|CICA|LUN_B;LUN;LUN_B;WWN=6008c0e1aabbccdd0011223344556677 | Asignación=alloc_type-a;oceanstor_lun_info,oceanstor_lungroup_member_info
+LUN|ZOCO|LUN_B;LUN;LUN_B;;oceanstor_host_lun_info
+LUN|unity-2-zoco|ORG1_CORE_01;LUN;ORG1_CORE_01;;unity_lun_size_total_bytes
+LUN|UNITY-1-CICA|ORG1_CORE_01;LUN;ORG1_CORE_01;;unity_lun_size_total_bytes
+LUN|unity-1-cica|ORG1_OTRA_02;LUN;ORG1_OTRA_02;;unity_lun_size_total_bytes
+LUN|unity-2-zoco|ORG2_DATA_0A;LUN;ORG2_DATA_0A;;unity_lun_size_total_bytes
+LUN|UNITY-1-CICA|ORG7_DATA_0A;LUN;ORG7_DATA_0A;;unity_lun_size_total_bytes
+LUN|UNITY-1-CICA|ORG7_X_DATA_0A;LUN;ORG7_X_DATA_0A;;unity_lun_size_total_bytes
+LUN|10.47.208.131:9100|VOL_1;LUN;VOL_1;WWN=600507680C8101234000000000000001 | Asignación=capacity_type-a | Grupo de volúmenes=volume_group-a | Espejo=mirrored-a;ibm_flashsystem_lun_mapping,ibm_flashsystem_volume_info
+LUN|10.47.208.11:9100|VOL_1;LUN;VOL_1;WWN=600507680C8101234000000000000001 | Asignación=capacity_type-a | Grupo de volúmenes=volume_group-a | Espejo=mirrored-a | Estado=status-a;ibm_flashsystem_volume_healthy,ibm_flashsystem_volume_info
+LUN|vcnppu01.junta.es:443|VOL_1;LUN;VOL_1;;ibm_flashsystem_lun_mapping
+LUN|vcnppu01.junta.es:443|VOL_2;LUN;VOL_2;WWN=600507680C8101234000000000000002 | Asignación=capacity_type-b | Grupo de volúmenes=volume_group-b | Espejo=mirrored-b | Estado=status-b;ibm_flashsystem_lun_mapping,ibm_flashsystem_volume_healthy,ibm_flashsystem_volume_info
+LUN|10.47.208.131:9100|VOL_2;LUN;VOL_2;Estado=status-b;ibm_flashsystem_volume_healthy
+LUN|10.47.208.11:9100|VOL_2;LUN;VOL_2;;ibm_flashsystem_lun_mapping
+LUN group|CICA|LG1;LUN group;LG1;;oceanstor_lungroup_member_info,oceanstor_mapping_view_info
+LUN group|ZOCO|LG2;LUN group;LG2;;oceanstor_lungroup_member_info,oceanstor_mapping_view_info
+Miembro F5|ORG2_DATA_0A|SANDETEL_PRO|POOL_A|10.1.1.10|443;Miembro F5;10.1.1.10:443;Puerto=443 | Disponibilidad=available | Estado admin=available;f5_bigip_pool_member_availability_state,f5_bigip_pool_member_enabled_state
+Miembro F5|ORG1_CORE_01|PART_HA_1|POOL_A|10.1.1.10|443;Miembro F5;10.1.1.10:443;Puerto=443 | Disponibilidad=available | Estado admin=available;f5_bigip_pool_member_availability_state,f5_bigip_pool_member_enabled_state
+Miembro F5|ORG1_OTRA_02|Common|POOL_A|10.1.1.10|443;Miembro F5;10.1.1.10:443;;f5_bigip_pool_member_monitor_info
+Miembro F5|ORG1_OTRA_02|Common|POOL_B|ccobuz38|993;Miembro F5;ccobuz38:993;Puerto=993 | Disponibilidad=offline | Estado admin=offline;f5_bigip_pool_member_availability_state,f5_bigip_pool_member_enabled_state
+Miembro F5|ORG2_DATA_0A|SANDETEL_PRO|POOL_B|ccobuz38|993;Miembro F5;ccobuz38:993;;f5_bigip_pool_member_monitor_info
+Miembro F5|ORG1_CORE_01|PART_HA_1|POOL_B|ccobuz38|993;Miembro F5;ccobuz38:993;;f5_bigip_pool_member_monitor_info
+Miembro F5|ORG1_CORE_01|PART_HA_1|chassis|chassis|chassis;Miembro F5;chassis:chassis;;alertas
+Miembro F5|ORG2_DATA_0A|SANDETEL_PRO|chassis|chassis|chassis;Miembro F5;chassis:chassis;;alertas
+Miembro F5|ORG1_OTRA_02|Common|chassis|chassis|chassis;Miembro F5;chassis:chassis;;alertas
+Monitor F5|ORG1_CORE_01|http_mon;Monitor F5;http_mon;Tipo=tipo_monitor-a | Capa=capa_monitor-a;f5_bigip_monitor_info,f5_bigip_pool_monitor_info
+Monitor F5|ORG1_OTRA_02|http_mon;Monitor F5;http_mon;Tipo=tipo_monitor-a | Capa=capa_monitor-a;f5_bigip_node_monitor_info,f5_bigip_pool_member_monitor_info,f5_bigip_pool_monitor_info
+Monitor F5|ORG2_DATA_0A|http_mon;Monitor F5;http_mon;Tipo=tipo_monitor-a | Capa=capa_monitor-a;f5_bigip_node_monitor_info,f5_bigip_pool_member_monitor_info
+Monitor F5|ORG1_OTRA_02|tcp_mon;Monitor F5;tcp_mon;Tipo=tipo_monitor-b | Capa=capa_monitor-b;f5_bigip_monitor_info,f5_bigip_node_monitor_info
+Monitor F5|ORG2_DATA_0A|tcp_mon;Monitor F5;tcp_mon;Tipo=tipo_monitor-b | Capa=capa_monitor-b;f5_bigip_monitor_info,f5_bigip_pool_member_monitor_info,f5_bigip_pool_monitor_info
+Monitor F5|ORG1_CORE_01|tcp_mon;Monitor F5;tcp_mon;Tipo=tipo_monitor-b | Capa=capa_monitor-b;f5_bigip_node_monitor_info,f5_bigip_pool_member_monitor_info,f5_bigip_pool_monitor_info
+NAS server|unity-1-cica|nas01;NAS server;nas01;;unity_filesystem_size_total_bytes
+NAS server|unity-2-zoco|nas02;NAS server;nas02;;unity_filesystem_size_total_bytes
+Nodo F5|ORG2_DATA_0A|SANDETEL_PRO|10.1.1.10;Nodo F5;10.1.1.10;;f5_bigip_node_monitor_info,f5_bigip_pool_member_availability_state
+Nodo F5|ORG1_CORE_01|PART_HA_1|10.1.1.10;Nodo F5;10.1.1.10;IP=10.1.1.10 | Estado nodo=available;f5_bigip_node_availability_state,f5_bigip_pool_member_availability_state
+Nodo F5|ORG1_OTRA_02|Common|10.1.1.10;Nodo F5;10.1.1.10;;f5_bigip_node_monitor_info
+Nodo F5|ORG1_OTRA_02|Common|ccobuz38;Nodo F5;ccobuz38;IP=10.1.1.11 | Estado nodo=offline;f5_bigip_node_availability_state,f5_bigip_pool_member_availability_state
+Nodo F5|ORG2_DATA_0A|SANDETEL_PRO|ccobuz38;Nodo F5;ccobuz38;IP=10.1.1.11 | Estado nodo=offline;f5_bigip_node_availability_state,f5_bigip_pool_member_availability_state
+Nodo F5|ORG1_CORE_01|PART_HA_1|ccobuz38;Nodo F5;ccobuz38;;f5_bigip_node_monitor_info
+Nodo Veeam|S00EHSES48;Nodo Veeam;S00EHSES48;Rol=tenant | Sede=CICA | Versión Veeam=12.1;veeam_component_info,veeam_service_state
+Nodo Veeam|s00e-hses-48.junta.es;Nodo Veeam;s00e-hses-48.junta.es;Rol=tenant | Sede=ZOCO | Versión Veeam=12.1;veeam_component_info,veeam_service_state
+Nodo Veeam|s00e-lsal-vbhard01-adm;Nodo Veeam;s00e-lsal-vbhard01-adm;Rol=hardened_repo | Sede=CICA;oceanstor_lun_info
+Nodo Veeam|s01e-hses-12.junta.es;Nodo Veeam;s01e-hses-12.junta.es;Rol=tenant | Sede=CICA | Versión Veeam=12.1;veeam_component_info,veeam_service_state
+Organismo F5|ADA;Organismo F5;ADA;;f5_bigip_virtual_server_enabled_state
+Organismo F5|EMP;Organismo F5;EMP;;f5_bigip_virtual_server_enabled_state
+Organismo en sede|ADA_CICA;Organismo en sede;ADA_CICA;Sede=CICA | Basado=basado-a;f5_bigip_virtual_server_enabled_state
+Organismo en sede|EMP_CICA;Organismo en sede;EMP_CICA;Sede=CICA | Basado=basado-b;f5_bigip_virtual_server_enabled_state
+Organismo en sede|EMP_ZOCO;Organismo en sede;EMP_ZOCO;Sede=ZOCO | Basado=basado-a;f5_bigip_virtual_server_enabled_state
+Partición F5|ORG1_OTRA_02|Common;Partición F5;Common;;f5_bigip_node_availability_state,f5_bigip_pool_availability_state,f5_bigip_virtual_server_enabled_state
+Partición F5|ORG1_CORE_01|PART_HA_1;Partición F5;PART_HA_1;;f5_bigip_node_availability_state,f5_bigip_pool_availability_state,f5_bigip_virtual_server_enabled_state
+Partición F5|ORG2_DATA_0A|SANDETEL_PRO;Partición F5;SANDETEL_PRO;;f5_bigip_node_availability_state,f5_bigip_pool_availability_state,f5_bigip_virtual_server_enabled_state
+Partición F5|s00-r-bac-01-t09-01|SANDETEL_PRO;Partición F5;SANDETEL_PRO;;f5_bigip_virtual_server_enabled_state
+Partición F5|s01-r-bac-01-t09-01|SANDETEL_PRO;Partición F5;SANDETEL_PRO;;f5_bigip_virtual_server_enabled_state
+Partición HA IBM|Common;Partición HA IBM;Common;Ubicación 1=location1_system-b | Ubicación 2=location2_system-b | Activa en=active_system-b | Preferida=preferred_system-b | Política HA=ha_policy-b | Estado HA=ha_status-b | Enlace=link_status-b;ibm_flashsystem_host_healthy,ibm_flashsystem_partition_ha_state,ibm_flashsystem_partition_info
+Partición HA IBM|PART_HA_1;Partición HA IBM;PART_HA_1;Ubicación 1=location1_system-b | Ubicación 2=location2_system-b | Activa en=active_system-b | Preferida=preferred_system-b | Política HA=ha_policy-b | Estado HA=ha_status-a | Enlace=link_status-a;ibm_flashsystem_host_healthy,ibm_flashsystem_partition_ha_state,ibm_flashsystem_partition_info
+Partición HA IBM|SANDETEL_PRO;Partición HA IBM;SANDETEL_PRO;Ubicación 1=location1_system-a | Ubicación 2=location2_system-a | Activa en=active_system-a | Preferida=preferred_system-a | Política HA=ha_policy-a | Estado HA=ha_status-a | Enlace=link_status-a;ibm_flashsystem_host_healthy,ibm_flashsystem_partition_ha_state,ibm_flashsystem_partition_info
+Pool|unity-2-zoco|ORG1_CORE_01;Pool;ORG1_CORE_01;;unity_pool_size_total_bytes
+Pool|unity-1-cica|ORG1_OTRA_02;Pool;ORG1_OTRA_02;;unity_pool_size_total_bytes
+Pool|unity-1-cica|ORG2_DATA_0A;Pool;ORG2_DATA_0A;;unity_pool_size_total_bytes
+Pool|CICA|POOL_A;Pool;POOL_A;;oceanstor_filesystem_info,oceanstor_lun_info,oceanstor_pool_capacity_bytes
+Pool|10.47.208.131:9100|POOL_A;Pool;POOL_A;Estado=status-a | Tipo=type-a | Easy Tier=easy_tier-a | Reducción de datos=data_reduction-a;ibm_flashsystem_array_healthy,ibm_flashsystem_pool_healthy,ibm_flashsystem_volume_info
+Pool|10.47.208.11:9100|POOL_A;Pool;POOL_A;;ibm_flashsystem_array_healthy,ibm_flashsystem_volume_info
+Pool|ZOCO|POOL_B;Pool;POOL_B;;oceanstor_filesystem_info,oceanstor_lun_info,oceanstor_pool_capacity_bytes
+Pool|10.47.208.11:9100|POOL_B;Pool;POOL_B;Estado=status-b | Tipo=type-b | Easy Tier=easy_tier-b | Reducción de datos=data_reduction-b;ibm_flashsystem_array_healthy,ibm_flashsystem_pool_healthy
+Pool|vcnppu01.junta.es:443|POOL_B;Pool;POOL_B;Estado=status-b | Tipo=type-b | Easy Tier=easy_tier-b | Reducción de datos=data_reduction-b;ibm_flashsystem_array_healthy,ibm_flashsystem_pool_healthy,ibm_flashsystem_volume_info
+Pool|10.47.208.131:9100|POOL_B;Pool;POOL_B;;ibm_flashsystem_volume_info
+Pool|UNITY-1-CICA|POOL_X;Pool;POOL_X;;unity_pool_size_total_bytes
+Pool F5|ORG1_OTRA_02|Common|POOL_A;Pool F5;POOL_A;Lógica de monitores=logica-a;f5_bigip_pool_monitor_info,f5_bigip_virtual_server_availability_state
+Pool F5|ORG2_DATA_0A|SANDETEL_PRO|POOL_A;Pool F5;POOL_A;;f5_bigip_pool_availability_state,f5_bigip_pool_member_availability_state,f5_bigip_virtual_server_availability_state
+Pool F5|ORG1_CORE_01|PART_HA_1|POOL_A;Pool F5;POOL_A;Lógica de monitores=logica-a;f5_bigip_pool_member_availability_state,f5_bigip_pool_monitor_info
+Pool F5|ORG1_CORE_01|PART_HA_1|POOL_B;Pool F5;POOL_B;;f5_bigip_pool_availability_state,f5_bigip_virtual_server_availability_state
+Pool F5|ORG1_OTRA_02|Common|POOL_B;Pool F5;POOL_B;;f5_bigip_pool_availability_state,f5_bigip_pool_member_availability_state,f5_bigip_virtual_server_availability_state
+Pool F5|ORG2_DATA_0A|SANDETEL_PRO|POOL_B;Pool F5;POOL_B;Lógica de monitores=logica-b;f5_bigip_pool_monitor_info
+Pool F5|ORG1_CORE_01|PART_HA_1|chassis;Pool F5;chassis;;alertas
+Pool F5|ORG2_DATA_0A|SANDETEL_PRO|chassis;Pool F5;chassis;;alertas
+Pool F5|ORG1_OTRA_02|Common|chassis;Pool F5;chassis;;alertas
+Quota|unity-2-zoco|chassis|chassis;Quota;chassis;;alertas
+Quota|unity-1-cica|chassis|chassis;Quota;chassis;;alertas
+Servicio Veeam|s00e-hses-48.junta.es|ORG1_CORE_01;Servicio Veeam;ORG1_CORE_01;Descripción=description-b;veeam_service_state
+Servicio Veeam|S00EHSES48|ORG1_OTRA_02;Servicio Veeam;ORG1_OTRA_02;Descripción=description-a;veeam_service_state
+Servicio Veeam|s01e-hses-12.junta.es|ORG2_DATA_0A;Servicio Veeam;ORG2_DATA_0A;Descripción=description-b;veeam_service_state
+Tenant F5|ORG1_CORE_01;Tenant F5;ORG1_CORE_01;Gestión=10.47.208.11:9100;alertas,f5_bigip_monitor_info,f5_bigip_node_availability_state,f5_bigip_pool_availability_state,f5_bigip_virtual_server_enabled_state
+Tenant F5|ORG1_OTRA_02;Tenant F5;ORG1_OTRA_02;Gestión=vcnppu01.junta.es:443;alertas,f5_bigip_monitor_info,f5_bigip_node_availability_state,f5_bigip_pool_availability_state,f5_bigip_virtual_server_enabled_state
+Tenant F5|ORG2_DATA_0A;Tenant F5;ORG2_DATA_0A;Gestión=10.47.208.131:9100;alertas,f5_bigip_monitor_info,f5_bigip_node_availability_state,f5_bigip_pool_availability_state,f5_bigip_virtual_server_enabled_state
+Tenant F5|s00-r-bac-01-t09-01;Tenant F5;s00-r-bac-01-t09-01;Imagen=image_version-a;f5_bigip_virtual_server_enabled_state,f5os_tenant_info
+Tenant F5|s01-r-bac-01-t09-01;Tenant F5;s01-r-bac-01-t09-01;Imagen=image_version-b;f5_bigip_virtual_server_enabled_state,f5os_tenant_info
+VM|vc04|ccobuz38;VM;ccobuz38;;vsphere_vm_datastore_info,vsphere_vm_power_state
+VM|10|ccobuz38;VM;ccobuz38;Último backup NetBackup=2026-11-08;vmware_vm_power_state
+VM|10|ccobuz39;VM;ccobuz39;Último backup NetBackup=2026-11-08;vmware_vm_power_state
+VM|vcx|excluida;VM;excluida;;vsphere_vm_power_state
+VM|vc05|s00e-hses-48;VM;s00e-hses-48;;vsphere_vm_datastore_info,vsphere_vm_power_state
+VM|vcnppu01|s00e-lsal-vbhard01-adm;VM;s00e-lsal-vbhard01-adm;Último backup NetBackup=2026-11-09;vmware_vm_power_state
+VM|vc05|vbproxy01;VM;vbproxy01;;vsphere_vm_power_state
+VM|vc04|vbproxy01;VM;vbproxy01;;vsphere_vm_datastore_info
+Virtual server F5|ORG1_OTRA_02|Common|vs_correo_443;Virtual server F5;vs_correo_443;;f5_bigip_virtual_server_availability_state,f5_bigip_virtual_server_enabled_state
+Virtual server F5|ORG2_DATA_0A|SANDETEL_PRO|vs_correo_443;Virtual server F5;vs_correo_443;;f5_bigip_virtual_server_availability_state
+Virtual server F5|s00-r-bac-01-t09-01|SANDETEL_PRO|vs_emp;Virtual server F5;vs_emp;;f5_bigip_virtual_server_enabled_state
+Virtual server F5|s01-r-bac-01-t09-01|SANDETEL_PRO|vs_emp;Virtual server F5;vs_emp;;f5_bigip_virtual_server_enabled_state
+Virtual server F5|ORG2_DATA_0A|SANDETEL_PRO|vs_imap;Virtual server F5;vs_imap;;f5_bigip_virtual_server_enabled_state
+Virtual server F5|ORG1_CORE_01|PART_HA_1|vs_imap;Virtual server F5;vs_imap;;f5_bigip_virtual_server_availability_state,f5_bigip_virtual_server_enabled_state
+Vsys PA|CICA|FW_CEFTA;Vsys PA;FW_CEFTA;Vsys=vsys9 | Sede=CICA;panos_vsys_info
+Vsys PA|Sin sede|FW_OTRO;Vsys PA;FW_OTRO;Vsys=vsys2 | Sede=Sin sede;panos_vsys_info
+Vsys PA|ZOCO|FW_OTRO;Vsys PA;FW_OTRO;Vsys=vsys2 | Sede=ZOCO;panos_vsys_info
+vCenter|10;vCenter;10;Datacenter=DC-ZOCO | Servidor=10.47.208.131:9100;vmware_datastore_capacity_size,vmware_vm_power_state
+vCenter|chassis;vCenter;chassis;;alertas
+vCenter|vc04;vCenter;vc04;;vsphere_cluster_hosts,vsphere_datastore_capacity_bytes
+vCenter|vc05;vCenter;vc05;;vsphere_cluster_hosts,vsphere_datastore_capacity_bytes
+vCenter|vcnppu01;vCenter;vcnppu01;Datacenter=DC-CICA | Servidor=vcnppu01.junta.es:443;vmware_datastore_capacity_size,vmware_vm_power_state
+vStore|CICA|vs1;vStore;vs1;;oceanstor_filesystem_info,oceanstor_lun_info,oceanstor_vstore_info
+vStore|ZOCO|vs2;vStore;vs2;;oceanstor_filesystem_info,oceanstor_lun_info,oceanstor_vstore_info

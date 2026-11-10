@@ -1,0 +1,32 @@
+{{- if .Values.api.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "contexto.fullname" . }}
+  labels:
+    {{- include "contexto.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    {{- include "contexto.selector" . | nindent 4 }}
+    app.kubernetes.io/component: api
+  ports:
+    - {name: http, port: {{ .Values.service.port }}, targetPort: http}
+    - {name: ops, port: {{ .Values.service.opsPort }}, targetPort: ops}
+{{- end }}
+---
+# Servicio sin balanceo para que Prometheus recoja las métricas de todas las réplicas.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "contexto.fullname" . }}-metrics
+  labels:
+    {{- include "contexto.labels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+spec:
+  clusterIP: None
+  selector:
+    {{- include "contexto.selector" . | nindent 4 }}
+  ports:
+    - {name: ops, port: {{ .Values.service.opsPort }}, targetPort: ops}

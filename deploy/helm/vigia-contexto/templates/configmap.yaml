@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "contexto.fullname" . }}-env
+  labels:
+    {{- include "contexto.labels" . | nindent 4 }}
+data:
+  CONTEXTO_TENANT_ID: {{ .Values.tenant.id | quote }}
+  CONTEXTO_TENANT_NAME: {{ .Values.tenant.name | quote }}
+  CONTEXTO_ONTOLOGY_DIR: /etc/contexto/ontology
+  CONTEXTO_PROMETHEUS_URLS: {{ join "," .Values.prometheus.urls | quote }}
+  CONTEXTO_PROMETHEUS_INSECURE: {{ .Values.prometheus.insecureSkipVerify | quote }}
+  CONTEXTO_PROMETHEUS_TIMEOUT: {{ .Values.prometheus.timeout | quote }}
+  CONTEXTO_PROMETHEUS_CONCURRENCY: {{ .Values.prometheus.concurrency | quote }}
+  CONTEXTO_MATCHERS_PER_REQUEST: {{ .Values.prometheus.matchersPerRequest | quote }}
+  CONTEXTO_ALERTMANAGER_URL: {{ .Values.alertmanager.url | quote }}
+  CONTEXTO_DISCOVERY_INTERVAL: {{ .Values.discovery.interval | quote }}
+  CONTEXTO_SERIES_LOOKBACK: {{ .Values.discovery.seriesLookback | quote }}
+  CONTEXTO_STALE_AFTER_CYCLES: {{ .Values.discovery.staleAfterCycles | quote }}
+  CONTEXTO_RETIRE_AFTER: {{ .Values.discovery.retireAfter | quote }}
+  CONTEXTO_EVENT_RETENTION_MONTHS: {{ .Values.discovery.eventRetentionMonths | quote }}
+  CONTEXTO_HTTP_ADDR: ":{{ .Values.service.port }}"
+  CONTEXTO_OPS_ADDR: ":{{ .Values.service.opsPort }}"
+  CONTEXTO_AUTH_MODE: {{ .Values.auth.mode | quote }}
+  CONTEXTO_AUTH_PROXY_HEADER: {{ .Values.auth.proxyHeader | quote }}
+  CONTEXTO_LOG_LEVEL: {{ .Values.log.level | quote }}
+  CONTEXTO_LOG_FORMAT: {{ .Values.log.format | quote }}
+  {{- if .Values.ingress.enabled }}
+  CONTEXTO_PUBLIC_URL: "https://{{ .Values.ingress.host }}"
+  {{- end }}

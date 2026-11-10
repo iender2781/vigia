@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vigia/contracts/feedback.maintenance.v1.schema.json",
+  "title": "es.vigia.feedback.maintenance.started|ended.v1 — ventana de mantenimiento de Vigía",
+  "type": "object",
+  "required": ["maintenance_id", "status", "starts_at", "ends_at", "by"],
+  "properties": {
+    "maintenance_id": {"type": "string"},
+    "status": {"enum": ["started", "ended"]},
+    "starts_at": {"type": "string", "format": "date-time"},
+    "ends_at": {"type": "string", "format": "date-time"},
+    "services": {"type": "array", "items": {"type": "string"}, "description": "Claves de servicio de Vigía"},
+    "ssii": {"type": "array", "items": {"type": "string"}},
+    "ci_ids": {"type": "array", "items": {"type": "string"}},
+    "reason": {"type": "string"},
+    "change_ref": {"type": "string", "description": "Referencia del cambio en el ITSM"},
+    "by": {"type": "string"}
+  },
+  "additionalProperties": false
+}

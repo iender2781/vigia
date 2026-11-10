@@ -1,0 +1,110 @@
+# Clases de CI por tecnología.
+classes:
+  - name: Cabina
+    technology: Cabinas
+    device: true
+    site_from_name: true
+  - name: Pool
+    technology: Cabinas
+  - name: LUN
+    technology: Cabinas
+    nav_parent: Pool
+  - name: LUN group
+    technology: Cabinas
+  - name: Filesystem
+    technology: Cabinas
+  - name: NAS server
+    technology: Cabinas
+  - name: vStore
+    technology: Cabinas
+  - name: Host en cabina
+    technology: Cabinas
+    site_from_name: true
+    nav_parent: Host group
+  - name: Host group
+    technology: Cabinas
+  - name: Quota
+    technology: Cabinas
+  - name: Partición HA IBM
+    technology: Cabinas
+    nav_parent: Cabina
+  - name: Componente de cabina
+    technology: Cabinas
+    nav_parent: Cabina
+  - name: Organismo F5
+    technology: Balanceadores
+    device: true
+  - name: Organismo en sede
+    technology: Balanceadores
+    site_from_name: true
+  - name: Tenant F5
+    technology: Balanceadores
+    site_from_name: true
+    nav_parent: Organismo en sede
+  - name: Partición F5
+    technology: Balanceadores
+  - name: Virtual server F5
+    technology: Balanceadores
+    nav_parent: Partición F5
+  - name: Pool F5
+    technology: Balanceadores
+    nav_parent: Partición F5
+  - name: Miembro F5
+    technology: Balanceadores
+    nav_parent: Pool F5
+  - name: Nodo F5
+    technology: Balanceadores
+    nav_parent: Partición F5
+  - name: Chasis F5
+    technology: Balanceadores
+    device: true
+    site_from_name: true
+  - name: Chassis partition F5
+    technology: Balanceadores
+  - name: Componente F5
+    technology: Balanceadores
+  - name: Monitor F5
+    technology: Balanceadores
+    nav_parent: Tenant F5
+  - name: vCenter
+    technology: Virtualización
+    device: true
+  - name: Clúster vSphere
+    technology: Virtualización
+    site_from_name: true
+  - name: ESXi
+    technology: Virtualización
+    site_from_name: true
+    nav_parent: Clúster vSphere
+  - name: VM
+    technology: Virtualización
+    site_from_name: true
+    nav_parent: ESXi
+  - name: Datastore
+    technology: Virtualización
+    site_from_name: true
+  - name: Infraestructura Veeam
+    technology: Backups
+    device: true
+    site_from_name: true
+  - name: Nodo Veeam
+    technology: Backups
+    site_from_name: true
+    nav_parent: Infraestructura Veeam
+  - name: Servicio Veeam
+    technology: Backups
+  - name: Clúster HA PA
+    technology: Firewalls
+    device: true
+    site_from_name: true
+  - name: Firewall PA
+    technology: Firewalls
+    site_from_name: true
+    nav_parent: Clúster HA PA
+  - name: Vsys PA
+    technology: Firewalls
+    site_from_name: true
+    nav_parent: Clúster HA PA
+  - name: Interfaz PA
+    technology: Firewalls
+    nav_parent: Firewall PA

@@ -1,0 +1,2 @@
+{"specversion":"1.0","id":"01JCB7R0000000000000000000","source":"vigia/motor","type":"es.vigia.feedback.alert.acked.v1","time":"2026-11-10T06:44:10Z","subject":"alert/9f2c41e0a1b2c3d4","tenantid":"11111111-2222-3333-4444-555555555555",
+ "data":{"alert_id":"a-77812","fingerprint":"9f2c41e0a1b2c3d4","by":"jperez","at":"2026-11-10T06:44:09Z","channel":"app"}}

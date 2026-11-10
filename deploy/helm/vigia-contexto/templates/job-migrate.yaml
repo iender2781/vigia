@@ -1,0 +1,49 @@
+{{- if .Values.migrations.enabled }}
+# Migraciones antes de instalar o actualizar. Si fallan, el despliegue no continúa.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "contexto.fullname" . }}-migrate-{{ .Release.Revision }}
+  labels:
+    {{- include "contexto.labels" . | nindent 4 }}
+    app.kubernetes.io/component: migrate
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "0"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: {{ .Values.migrations.backoffLimit }}
+  activeDeadlineSeconds: 600
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      labels:
+        {{- include "contexto.selector" . | nindent 8 }}
+        app.kubernetes.io/component: migrate
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: migrate
+          image: {{ include "contexto.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["migrate"]
+          env:
+            - {name: CONTEXTO_TENANT_ID, value: {{ .Values.tenant.id | quote }}}
+            - {name: CONTEXTO_TENANT_NAME, value: {{ .Values.tenant.name | quote }}}
+            {{- include "contexto.env" . | nindent 12 }}
+          resources:
+            requests: {cpu: 50m, memory: 64Mi}
+            limits: {memory: 256Mi}
+          securityContext:
+            {{- include "contexto.securityContext" . | nindent 12 }}
+{{- end }}

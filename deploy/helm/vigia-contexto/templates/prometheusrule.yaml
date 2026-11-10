@@ -1,0 +1,50 @@
+{{- if .Values.monitoring.prometheusRule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "contexto.fullname" . }}
+  labels:
+    {{- include "contexto.labels" . | nindent 4 }}
+    {{- with .Values.monitoring.prometheusRule.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+    - name: vigia-contexto
+      rules:
+        - alert: ContextoDescubrimientoParado
+          expr: time() - max(contexto_discovery_last_success_timestamp_seconds) > 3 * 300
+          for: 5m
+          labels: {severity: warning, team: devops}
+          annotations:
+            summary: "La CMDB no se actualiza desde hace más de 3 ciclos"
+            runbook: "Revisar el líder de discovery (contexto_discovery_leader) y los errores de Prometheus."
+        - alert: ContextoDescubrimientoFallando
+          expr: increase(contexto_discovery_runs_total{status="failed"}[30m]) >= 3
+          labels: {severity: warning, team: devops}
+          annotations:
+            summary: "Al menos 3 ejecuciones del descubrimiento fallidas en 30 min"
+        - alert: ContextoSinLider
+          expr: max(contexto_discovery_leader) == 0
+          for: 10m
+          labels: {severity: warning, team: devops}
+          annotations:
+            summary: "Ninguna réplica de discovery tiene el liderazgo"
+        - alert: ContextoPrometheusInaccesible
+          expr: increase(contexto_prometheus_errors_total[15m]) > 5
+          labels: {severity: warning, team: devops}
+          annotations:
+            summary: "Errores repetidos al consultar Prometheus o Alertmanager"
+        - alert: ContextoAPIErrores
+          expr: sum(rate(contexto_http_requests_total{code=~"5.."}[10m])) / clamp_min(sum(rate(contexto_http_requests_total[10m])), 1e-9) > 0.05
+          for: 10m
+          labels: {severity: warning, team: devops}
+          annotations:
+            summary: "Más del 5 % de las peticiones a la API fallan"
+        - alert: ContextoCaido
+          expr: absent(up{job=~".*vigia-contexto.*"} == 1)
+          for: 5m
+          labels: {severity: critical, team: devops}
+          annotations:
+            summary: "No hay ninguna réplica de la plataforma de contexto respondiendo"
+{{- end }}

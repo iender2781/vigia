@@ -1,0 +1,10 @@
+Plataforma de contexto de Vigía {{ .Chart.AppVersion }} instalada en {{ .Release.Namespace }}.
+
+Comprobaciones:
+  kubectl -n {{ .Release.Namespace }} get pods -l app.kubernetes.io/instance={{ .Release.Name }}
+  kubectl -n {{ .Release.Namespace }} logs -l app.kubernetes.io/component=discovery --tail=50
+{{- if .Values.ingress.enabled }}
+  Web: https://{{ .Values.ingress.host }}
+{{- else }}
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "contexto.fullname" . }} 8080:{{ .Values.service.port }}
+{{- end }}

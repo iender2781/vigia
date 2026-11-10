@@ -1,0 +1,170 @@
+# Parámetros de correlación heredados del correlador Python (se usan desde la fase 3).
+fanout_overrides:
+  f5_node: 500
+  f5_node_address: 500
+member_view:
+  Pool F5:
+    node_rel: apunta a
+    probe_rel: monitorizado por
+    rel: balancea a
+relabel:
+  - rename:
+      name: veeam_item
+    when:
+      job: veeam_node
+  - rename:
+      partition: guest_partition
+    when:
+      job: vmware_.*
+  - rename:
+      name: panos_counter
+    when:
+      job: panos_exporter
+  - rename:
+      entity: esxi_host
+    when:
+      entity_type: HostSystem
+  - rename:
+      host: esxi_host
+    when:
+      vcenter: .+
+  - rename:
+      address: f5_node_address
+      name: f5_tenant
+      node: f5_node
+      partition: f5_partition
+      pool: f5_pool
+      port: f5_port
+      virtual_server: f5_virtual_server
+    when:
+      role: tenant
+  - rename:
+      name: f5_chassis_partition
+      node: f5_blade
+      tenant: f5_tenant
+    when:
+      role: chassis_partition
+  - rename:
+      address: f5_node_address
+      name: f5_tenant
+      node: f5_node
+      partition: f5_partition
+      pool: f5_pool
+      port: f5_port
+      virtual_server: f5_virtual_server
+    when:
+      servicio: f5.*
+stop_labels:
+  - __name__
+  - job
+  - le
+  - quantile
+  - severity
+  - priority
+  - team
+  - owner
+  - env
+  - environment
+  - entorno
+  - monitor
+  - prometheus
+  - prometheus_replica
+  - replica
+  - receiver
+  - alertname
+  - alertstate
+  - alertgroup
+  - fstype
+  - cpu
+  - unit
+  - exporter
+  - collector
+  - scrape_job
+  - site
+  - nivel
+  - layer
+  - category
+  - aspect
+  - created_at
+  - message_id
+  - alert_group
+  - alert_category
+  - source
+  - event_id
+  - permission
+  - generation
+  - localizacion
+  - organismo
+  - basado
+  - servicio
+  - job_env
+  - capa_monitor
+  - tipo_monitor
+  - logica
+  - tier
+  - f5_port
+  - field
+  - column
+  - window
+  - tmm
+  - sensor
+  - ifindex
+  - fsindex
+  - is_bundle
+  - key_size
+  - key_type
+  - issuer_cn
+  - netmask
+  - gateway
+  - mtu
+  - mac
+  - alloc_type
+  - sync_state
+  - running_state
+  - phase
+  - primary_slot
+  - image_version
+  - nodes
+  - result
+  - sequence
+  - tipo
+  - profile
+  - vs_partition
+  - message
+  - endpoint
+  - protocolo
+  - part_no
+  - serial
+  - tpm_status
+  - path
+  - driver
+  - build
+  - full_name
+  - tag
+  - object
+  - object_type
+  - acknowledged
+  - alarm
+  - entity_type
+  - startup_type
+  - ntp
+  - interface
+  - mountpoint
+  - panos_counter
+  - bridge_method
+  - cmdb_source
+  - NB_LAST_BACKUP
+  - IP_GW
+  - TLS_RenovacionURL
+  - tags
+  - guest_partition
+  - rotational
+  - major
+  - minor
+  - uuid
+  - lv_name
+  - vg_name
+  - mitigation
+  - clocksource
+  - codename
+  - peer_mgmt_ip

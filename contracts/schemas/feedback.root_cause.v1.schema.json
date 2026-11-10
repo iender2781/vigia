@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vigia/contracts/feedback.root_cause.v1.schema.json",
+  "title": "es.vigia.feedback.root_cause.v1 — causa raíz confirmada o corregida por el operador",
+  "type": "object",
+  "required": ["incident_id", "ci_id", "verdict", "by", "at"],
+  "properties": {
+    "incident_id": {"type": "string"},
+    "ci_id": {"type": "string", "description": "CI que el operador da como causa"},
+    "verdict": {"enum": ["confirmada", "corregida", "rechazada"]},
+    "previous_ci_id": {"type": "string", "description": "Candidato propuesto, si el operador lo ha corregido"},
+    "by": {"type": "string"},
+    "at": {"type": "string", "format": "date-time"},
+    "resolution": {"type": "string", "description": "Qué se hizo para resolverla (base de conocimiento)"}
+  },
+  "additionalProperties": false
+}

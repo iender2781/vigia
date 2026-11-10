@@ -1,0 +1,441 @@
+# Reglas de Balanceadores.
+pack: f5
+technology: Balanceadores
+description: Importado de config_junta.json. Revisar y documentar cada regla.
+rules:
+  - id: f5os-component-info
+    order: 180
+    metric: f5os_component_info
+    where:
+      component: chassis
+    cis:
+      - alias: ch
+        class: Chasis F5
+        key:
+          - chassis
+        attrs:
+          Modelo: model
+          Sede: site
+          Serie: serial
+  - id: f5os-tenant-info
+    order: 190
+    metric: f5os_tenant_info
+    cis:
+      - alias: ten
+        class: Tenant F5
+        key:
+          - tenant
+        attrs:
+          Imagen: image_version
+      - alias: ch
+        class: Chasis F5
+        key:
+          - chassis
+    rels:
+      - from: ten
+        rel: se ejecuta en
+        to: ch
+  - id: f5-bigip-virtual-server-enabled-state
+    order: 200
+    metric: f5_bigip_virtual_server_enabled_state
+    computed:
+      - name: organismo_base
+        regex:
+          from: organismo
+          pattern: ^(.*?)(?:_(?:CICA|ZOCO))?$
+    cis:
+      - alias: vs
+        class: Virtual server F5
+        key:
+          - name
+          - partition
+          - virtual_server
+      - alias: part
+        class: Partición F5
+        key:
+          - name
+          - partition
+      - alias: ten
+        class: Tenant F5
+        key:
+          - name
+        attrs:
+          Gestión: instance
+      - alias: orgs
+        class: Organismo en sede
+        key:
+          - organismo
+        attrs:
+          Basado: basado
+          Sede: site
+      - alias: org
+        class: Organismo F5
+        key:
+          - organismo_base
+    rels:
+      - from: vs
+        rel: definido en
+        to: part
+      - from: part
+        rel: definida en
+        to: ten
+      - from: ten
+        rel: del organismo
+        to: orgs
+      - from: orgs
+        rel: del organismo
+        to: org
+  - id: f5-bigip-virtual-server-availability-state
+    order: 210
+    metric: f5_bigip_virtual_server_availability_state
+    cis:
+      - alias: vs
+        class: Virtual server F5
+        key:
+          - name
+          - partition
+          - virtual_server
+      - alias: pool
+        class: Pool F5
+        key:
+          - name
+          - partition
+          - pool
+    rels:
+      - from: vs
+        rel: usa
+        to: pool
+  - id: f5-bigip-pool-availability-state
+    order: 220
+    metric: f5_bigip_pool_availability_state
+    cis:
+      - alias: pool
+        class: Pool F5
+        key:
+          - name
+          - partition
+          - pool
+      - alias: part
+        class: Partición F5
+        key:
+          - name
+          - partition
+      - alias: ten
+        class: Tenant F5
+        key:
+          - name
+    rels:
+      - from: pool
+        rel: definido en
+        to: part
+      - from: part
+        rel: definida en
+        to: ten
+  - id: f5-bigip-pool-member-availability-state
+    order: 230
+    metric: f5_bigip_pool_member_availability_state
+    computed:
+      - name: member
+        format: "{node}:{port}"
+    cis:
+      - alias: pool
+        class: Pool F5
+        key:
+          - name
+          - partition
+          - pool
+      - alias: mem
+        class: Miembro F5
+        key:
+          - name
+          - partition
+          - pool
+          - node
+          - port
+        name: member
+        attrs:
+          Disponibilidad: state
+          Puerto: port
+      - alias: node
+        class: Nodo F5
+        key:
+          - name
+          - partition
+          - node
+    rels:
+      - from: pool
+        rel: balancea a
+        to: mem
+      - from: mem
+        rel: apunta a
+        to: node
+  - id: f5-bigip-node-availability-state
+    order: 240
+    metric: f5_bigip_node_availability_state
+    cis:
+      - alias: node
+        class: Nodo F5
+        key:
+          - name
+          - partition
+          - node
+        attrs:
+          Estado nodo: state
+          IP: address
+      - alias: part
+        class: Partición F5
+        key:
+          - name
+          - partition
+      - alias: ten
+        class: Tenant F5
+        key:
+          - name
+    rels:
+      - from: node
+        rel: definido en
+        to: part
+      - from: part
+        rel: definida en
+        to: ten
+  - id: f5os-memory-cpu-utilization
+    order: 250
+    metric_regex: f5os_(memory|cpu_utilization)_.*
+    where:
+      role: chassis_partition
+    cis:
+      - alias: cp
+        class: Chassis partition F5
+        key:
+          - name
+      - alias: ch
+        class: Chasis F5
+        key:
+          - chassis
+      - alias: comp
+        class: Componente F5
+        key:
+          - chassis
+          - component
+    rels:
+      - from: cp
+        rel: se ejecuta en
+        to: ch
+      - from: comp
+        rel: de
+        to: cp
+  - id: f5os-component-info-2
+    order: 260
+    metric: f5os_component_info
+    cis:
+      - alias: comp
+        class: Componente F5
+        key:
+          - chassis
+          - component
+        attrs:
+          Modelo: model
+          Serie: serial
+          Tipo: type
+      - alias: ch
+        class: Chasis F5
+        key:
+          - chassis
+    rels:
+      - from: comp
+        rel: instalado en
+        to: ch
+  - id: f5-alertas-component-role
+    order: 480
+    source: alerts
+    where:
+      component: .+
+      role: chassis_partition
+    cis:
+      - alias: cp
+        class: Chassis partition F5
+        key:
+          - name
+      - alias: comp
+        class: Componente F5
+        key:
+          - chassis
+          - component
+      - alias: ch
+        class: Chasis F5
+        key:
+          - chassis
+    rels:
+      - from: comp
+        rel: de
+        to: cp
+      - from: cp
+        rel: se ejecuta en
+        to: ch
+  - id: f5-alertas-alertname-role
+    order: 490
+    source: alerts
+    where:
+      alertname: F5S.*
+      role: tenant
+    cis:
+      - alias: ten
+        class: Tenant F5
+        key:
+          - name
+      - alias: ch
+        class: Chasis F5
+        key:
+          - chassis
+    rels:
+      - from: ten
+        rel: se ejecuta en
+        to: ch
+  - id: f5-bigip-pool-member-enabled-state
+    order: 590
+    metric: f5_bigip_pool_member_enabled_state
+    computed:
+      - name: member
+        format: "{node}:{port}"
+    cis:
+      - alias: mem
+        class: Miembro F5
+        key:
+          - name
+          - partition
+          - pool
+          - node
+          - port
+        name: member
+        attrs:
+          Estado admin: state
+  - id: f5-bigip-monitor-info
+    order: 600
+    metric: f5_bigip_monitor_info
+    cis:
+      - alias: mon
+        class: Monitor F5
+        key:
+          - name
+          - monitor
+        attrs:
+          Capa: capa_monitor
+          Tipo: tipo_monitor
+      - alias: ten
+        class: Tenant F5
+        key:
+          - name
+    rels:
+      - from: mon
+        rel: definido en
+        to: ten
+  - id: f5-bigip-pool-monitor-info
+    order: 610
+    metric: f5_bigip_pool_monitor_info
+    cis:
+      - alias: pool
+        class: Pool F5
+        key:
+          - name
+          - partition
+          - pool
+        attrs:
+          Lógica de monitores: logica
+      - alias: mon
+        class: Monitor F5
+        key:
+          - name
+          - monitor
+        attrs:
+          Capa: capa_monitor
+          Tipo: tipo_monitor
+    rels:
+      - from: pool
+        rel: monitorizado por
+        to: mon
+        attrs:
+          Lógica: logica
+  - id: f5-bigip-pool-member-monitor-info
+    order: 620
+    metric: f5_bigip_pool_member_monitor_info
+    computed:
+      - name: member
+        format: "{node}:{port}"
+    cis:
+      - alias: mem
+        class: Miembro F5
+        key:
+          - name
+          - partition
+          - pool
+          - node
+          - port
+        name: member
+      - alias: mon
+        class: Monitor F5
+        key:
+          - name
+          - monitor
+        attrs:
+          Capa: capa_monitor
+          Tipo: tipo_monitor
+    rels:
+      - from: mem
+        rel: monitorizado por
+        to: mon
+        attrs:
+          Lógica: logica
+  - id: f5-bigip-node-monitor-info
+    order: 630
+    metric: f5_bigip_node_monitor_info
+    cis:
+      - alias: node
+        class: Nodo F5
+        key:
+          - name
+          - partition
+          - node
+      - alias: mon
+        class: Monitor F5
+        key:
+          - name
+          - monitor
+        attrs:
+          Capa: capa_monitor
+          Tipo: tipo_monitor
+    rels:
+      - from: node
+        rel: monitorizado por
+        to: mon
+        attrs:
+          Lógica: logica
+  - id: f5-alertas-node-pool-port
+    order: 640
+    source: alerts
+    where:
+      node: .+
+      pool: .+
+      port: .+
+    computed:
+      - name: member
+        format: "{node}:{port}"
+    cis:
+      - alias: mem
+        class: Miembro F5
+        key:
+          - name
+          - partition
+          - pool
+          - node
+          - port
+        name: member
+      - alias: pool
+        class: Pool F5
+        key:
+          - name
+          - partition
+          - pool
+    rels:
+      - from: pool
+        rel: balancea a
+        to: mem

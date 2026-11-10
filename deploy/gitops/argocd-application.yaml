@@ -1,0 +1,24 @@
+# Una aplicación por entorno (cambiar ENTORNO por dev, pre o pro).
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vigia-contexto-ENTORNO
+  namespace: argocd
+spec:
+  project: vigia
+  sources:
+    - repoURL: https://github.com/iender2781/vigia
+      targetRevision: v0.1.0           # etiqueta de la versión a desplegar
+      path: deploy/helm/vigia-contexto
+      helm:
+        releaseName: vigia-contexto
+        valueFiles: [$values/contexto/ENTORNO/values.yaml]
+    - repoURL: https://git.dominio/devops/infra-vigia.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: vigia-app
+  syncPolicy:
+    automated: {prune: true, selfHeal: true}   # en pro: quitar "automated" y sincronizar a mano
+    syncOptions: [CreateNamespace=false]
