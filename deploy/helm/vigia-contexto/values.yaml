@@ -110,3 +110,16 @@ serviceAccount:
 podAnnotations: {}
 nodeSelector: {}
 tolerations: []
+
+# Variables, volúmenes y montajes adicionales para api y discovery.
+# Uso típico: montar la CA corporativa para hablar con Prometheus por TLS.
+#   extraEnv:
+#     - {name: SSL_CERT_DIR, value: /etc/ssl/certs:/etc/contexto/ca}
+#   extraVolumes:
+#     - name: ca-corporativa
+#       configMap: {name: ca-corporativa}
+#   extraVolumeMounts:
+#     - {name: ca-corporativa, mountPath: /etc/contexto/ca, readOnly: true}
+extraEnv: []
+extraVolumes: []
+extraVolumeMounts: []

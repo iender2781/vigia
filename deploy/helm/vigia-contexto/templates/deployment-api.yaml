@@ -44,6 +44,9 @@ spec:
             - configMapRef: {name: {{ include "contexto.fullname" . }}-env}
           env:
             {{- include "contexto.env" . | nindent 12 }}
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           ports:
             - {name: http, containerPort: {{ .Values.service.port }}}
             - {name: ops, containerPort: {{ .Values.service.opsPort }}}
@@ -63,10 +66,16 @@ spec:
           volumeMounts:
             - {name: tmp, mountPath: /tmp}
             {{- include "contexto.ontologyMounts" . | nindent 12 }}
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
       volumes:
         - name: tmp
           emptyDir: {}
         {{- include "contexto.ontologyVolumes" . | nindent 8 }}
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- if .Values.topologySpread.enabled }}
       topologySpreadConstraints:
         - maxSkew: 1
