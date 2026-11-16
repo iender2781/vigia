@@ -26,5 +26,5 @@ data:
   CONTEXTO_LOG_LEVEL: {{ .Values.log.level | quote }}
   CONTEXTO_LOG_FORMAT: {{ .Values.log.format | quote }}
   {{- if .Values.ingress.enabled }}
-  CONTEXTO_PUBLIC_URL: "https://{{ .Values.ingress.host }}"
+  CONTEXTO_PUBLIC_URL: "{{ if .Values.ingress.tls.enabled }}https{{ else }}http{{ end }}://{{ .Values.ingress.host }}"
   {{- end }}
