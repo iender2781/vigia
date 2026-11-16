@@ -1,14 +1,14 @@
 # Imagen de la plataforma de contexto de Vigía: un único binario estático con la web
 # embebida y la ontología en /etc/contexto/ontology.
 
-FROM node:22-alpine AS web
+FROM docker.io/library/node:22-alpine AS web
 WORKDIR /src/web/contexto
 COPY web/contexto/package.json web/contexto/package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY web/contexto/ ./
 RUN mkdir -p /src/internal/contexto/web/dist && npm run build
 
-FROM golang:1.23-alpine AS build
+FROM docker.io/library/golang:1.23-alpine AS build
 WORKDIR /src
 COPY go.mod go.sum ./
 RUN go mod download
