@@ -1,0 +1,211 @@
+# Reglas de Virtualización.
+pack: vmware
+technology: Virtualización
+description: Importado de config_junta.json. Revisar y documentar cada regla.
+rules:
+  - id: vsphere-datastore-capacity-bytes
+    order: 10
+    metric: vsphere_datastore_capacity_bytes
+    cis:
+      - alias: ds
+        class: Datastore
+        key:
+          - vcenter
+          - datastore
+      - alias: vc
+        class: vCenter
+        key:
+          - vcenter
+    rels:
+      - from: ds
+        rel: pertenece a
+        to: vc
+  - id: vsphere-cluster-hosts
+    order: 20
+    metric: vsphere_cluster_hosts
+    cis:
+      - alias: cl
+        class: Clúster vSphere
+        key:
+          - vcenter
+          - cluster
+      - alias: vc
+        class: vCenter
+        key:
+          - vcenter
+    rels:
+      - from: cl
+        rel: pertenece a
+        to: vc
+  - id: vsphere-host-overall-status
+    order: 30
+    metric: vsphere_host_overall_status
+    cis:
+      - alias: esx
+        class: ESXi
+        key:
+          - host
+      - alias: cl
+        class: Clúster vSphere
+        key:
+          - vcenter
+          - cluster
+    rels:
+      - from: esx
+        rel: pertenece a
+        to: cl
+  - id: vsphere-host-hardware-info
+    order: 40
+    metric: vsphere_host_hardware_info
+    cis:
+      - alias: esx
+        class: ESXi
+        key:
+          - host
+        attrs:
+          Fabricante: vendor
+          Modelo: model
+  - id: vsphere-host-product-info
+    order: 50
+    metric: vsphere_host_product_info
+    cis:
+      - alias: esx
+        class: ESXi
+        key:
+          - host
+        attrs:
+          Versión: full_name
+  - id: vsphere-vm-power-state
+    order: 60
+    metric: vsphere_vm_power_state
+    cis:
+      - alias: vm
+        class: VM
+        key:
+          - vcenter
+          - vm
+      - alias: esx
+        class: ESXi
+        key:
+          - host
+    rels:
+      - from: vm
+        rel: se ejecuta en
+        to: esx
+  - id: vsphere-vm-datastore-info
+    order: 70
+    metric: vsphere_vm_datastore_info
+    cis:
+      - alias: vm
+        class: VM
+        key:
+          - vcenter
+          - vm
+      - alias: ds
+        class: Datastore
+        key:
+          - vcenter
+          - datastore
+    rels:
+      - from: vm
+        rel: usa
+        to: ds
+  - id: vmware-alertas-vcenter
+    order: 580
+    source: alerts
+    where:
+      vcenter: .+
+    cis:
+      - alias: vc
+        class: vCenter
+        key:
+          - vcenter
+  - id: vmware-vm-power-state
+    order: 650
+    metric: vmware_vm_power_state
+    description: >-
+      VM con su ESXi, clúster, datastore y vCenter. Extensión respecto al correlador Python:
+      COD_SSII (código texto-texto-número dentro de la etiqueta tags), Etiquetas y Estado
+      (1 = encendida, 0 = apagada, a partir del valor de la serie).
+    computed:
+      - name: vcenter
+        regex:
+          from: instance
+          pattern: ^([^.:]+)
+      - name: cod_ssii
+        regex:
+          from: tags
+          pattern: .*?\b([A-Z][A-Z0-9]*-[A-Z][A-Z0-9]*-[0-9]+)\b
+    cis:
+      - alias: vm
+        class: VM
+        key:
+          - vcenter
+          - vm_name
+        attrs:
+          Último backup NetBackup: NB_LAST_BACKUP
+          COD_SSII: cod_ssii
+          Etiquetas: tags
+        value_attr: Estado
+        value_map:
+          "1": encendida
+          "0": apagada
+      - alias: esx
+        class: ESXi
+        key:
+          - host_name
+      - alias: cl
+        class: Clúster vSphere
+        key:
+          - vcenter
+          - cluster_name
+      - alias: ds
+        class: Datastore
+        key:
+          - vcenter
+          - ds_name
+      - alias: vc
+        class: vCenter
+        key:
+          - vcenter
+        attrs:
+          Datacenter: dc_name
+          Servidor: instance
+    rels:
+      - from: vm
+        rel: se ejecuta en
+        to: esx
+      - from: vm
+        rel: usa
+        to: ds
+      - from: esx
+        rel: pertenece a
+        to: cl
+      - from: cl
+        rel: pertenece a
+        to: vc
+  - id: vmware-datastore-capacity-size
+    order: 660
+    metric: vmware_datastore_capacity_size
+    computed:
+      - name: vcenter
+        regex:
+          from: instance
+          pattern: ^([^.:]+)
+    cis:
+      - alias: ds
+        class: Datastore
+        key:
+          - vcenter
+          - ds_name
+      - alias: vc
+        class: vCenter
+        key:
+          - vcenter
+        attrs:
+          Datacenter: dc_name
+          Servidor: instance
+    rels:
+      - from: ds
+        rel: pertenece a
+        to: vc

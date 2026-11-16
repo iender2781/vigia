@@ -1,0 +1,124 @@
+# Reglas de Backups.
+pack: veeam
+technology: Backups
+description: Importado de config_junta.json. Revisar y documentar cada regla.
+rules:
+  - id: veeam-component-info
+    order: 670
+    metric: veeam_component_info
+    computed:
+      - name: veeam_name
+        format: Veeam {site}
+    cis:
+      - alias: node
+        class: Nodo Veeam
+        key:
+          - host
+        attrs:
+          Rol: role
+          Sede: site
+          Versión Veeam: version
+      - alias: inf
+        class: Infraestructura Veeam
+        key:
+          - site
+        name: veeam_name
+        attrs:
+          Sede: site
+    rels:
+      - from: node
+        rel: pertenece a
+        to: inf
+  - id: veeam-service-state
+    order: 680
+    metric: veeam_service_state
+    computed:
+      - name: veeam_name
+        format: Veeam {site}
+    cis:
+      - alias: svc
+        class: Servicio Veeam
+        key:
+          - host
+          - name
+        attrs:
+          Descripción: description
+        value_attr: Estado
+        value_map:
+          "0": inactive
+          "1": active
+      - alias: node
+        class: Nodo Veeam
+        key:
+          - host
+        attrs:
+          Rol: role
+          Sede: site
+      - alias: inf
+        class: Infraestructura Veeam
+        key:
+          - site
+        name: veeam_name
+        attrs:
+          Sede: site
+    rels:
+      - from: svc
+        rel: en
+        to: node
+      - from: node
+        rel: pertenece a
+        to: inf
+  - id: oceanstor-lun-info-2
+    order: 690
+    metric: oceanstor_lun_info
+    where:
+      lun: ".*-VB-vbhard\\d+_\\d+"
+    computed:
+      - name: vbsite
+        regex:
+          from: lun
+          pattern: "^LUN_(\\d\\d)_"
+      - name: vbtok
+        regex:
+          from: lun
+          pattern: ".*-VB-(vbhard\\d+)_\\d+$"
+      - name: vbhost
+        format: s{vbsite}e-lsal-{vbtok}-adm
+      - name: site
+        map:
+          from: vbsite
+          values:
+            "00": CICA
+            "01": ZOCO
+      - name: veeam_name
+        format: Veeam {site}
+      - name: vbrole
+        format: hardened_repo
+    cis:
+      - alias: node
+        class: Nodo Veeam
+        key:
+          - vbhost
+        attrs:
+          Rol: vbrole
+          Sede: site
+      - alias: lun
+        class: LUN
+        key:
+          - sede
+          - lun
+      - alias: inf
+        class: Infraestructura Veeam
+        key:
+          - site
+        name: veeam_name
+        attrs:
+          Sede: site
+    rels:
+      - from: node
+        rel: almacena en
+        to: lun
+      - from: node
+        rel: pertenece a
+        to: inf
+    method: nombre de la LUN

@@ -1,0 +1,2 @@
+{"specversion":"1.0","id":"01JCB7Q3XB0000000000000000","source":"plataforma/correlator","type":"es.vigia.ctx.ssii.state.v1","time":"2026-11-10T06:42:08Z","subject":"ssii/CJDA-CCOR-001","tenantid":"11111111-2222-3333-4444-555555555555",
+ "data":{"code":"CJDA-CCOR-001","state":"degradado","previous":"ok","since":"2026-11-10T06:42:00Z","explanation":"4 de 13 pools F5 con miembros caídos","incident_id":"inc-412"}}

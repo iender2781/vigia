@@ -1,0 +1,36 @@
+# Flujos de NATS JetStream compartidos entre Vigía y la plataforma de contexto.
+# Los crea quien publica, al arrancar, con estos parámetros (idempotente).
+streams:
+  - name: ALERTS
+    owner: vigia            # ya previsto en el diseño de Vigía
+    subjects: ["vigia.alerts.*.fired", "vigia.alerts.*.resolved"]
+    replicas: 3
+    retention: limits
+    max_age: 168h           # 7 días
+    consumers:
+      - name: contexto      # la plataforma; consumidor duradero, ack explícito
+        ack_wait: 60s
+        max_deliver: 10
+  - name: CONTEXT
+    owner: contexto
+    subjects: ["ctx.alert.*.enriched", "ctx.incident.*.opened", "ctx.incident.*.updated", "ctx.incident.*.resolved", "ctx.ssii.*.state"]
+    replicas: 3
+    retention: limits
+    max_age: 168h
+    consumers:
+      - name: vigia-motor
+        ack_wait: 30s
+        max_deliver: 10
+  - name: FEEDBACK
+    owner: vigia
+    subjects: ["vigia.alert.*.acked", "vigia.alert.*.closed", "vigia.incident.*.root_cause", "vigia.maintenance.*.started", "vigia.maintenance.*.ended"]
+    replicas: 3
+    retention: limits
+    max_age: 168h
+    consumers:
+      - name: contexto
+        ack_wait: 60s
+        max_deliver: 10
+# Mensajes que no se pueden procesar (esquema incompatible, datos inválidos): se publican en
+# <sujeto original con prefijo dlq.> y se miden; nunca bloquean el flujo.
+dead_letter_prefix: dlq.

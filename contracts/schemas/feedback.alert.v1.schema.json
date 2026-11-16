@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vigia/contracts/feedback.alert.v1.schema.json",
+  "title": "es.vigia.feedback.alert.acked|closed.v1 — reconocimiento o cierre manual en Vigía",
+  "type": "object",
+  "required": ["alert_id", "fingerprint", "by", "at"],
+  "properties": {
+    "alert_id": {"type": "string"},
+    "fingerprint": {"type": "string"},
+    "by": {"type": "string", "description": "Usuario de Vigía"},
+    "at": {"type": "string", "format": "date-time"},
+    "channel": {"type": "string", "description": "app, web, sms, voz, telegram, whatsapp, slack, teams..."},
+    "note": {"type": "string"}
+  },
+  "additionalProperties": false
+}

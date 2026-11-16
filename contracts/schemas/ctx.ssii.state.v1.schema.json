@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vigia/contracts/ctx.ssii.state.v1.schema.json",
+  "title": "es.vigia.ctx.ssii.state.v1 — cambio de estado de un Sistema de Información",
+  "type": "object",
+  "required": ["code", "state", "previous", "since"],
+  "properties": {
+    "code": {"type": "string"},
+    "state": {"enum": ["ok", "aviso", "degradado", "critico", "desconocido", "mantenimiento"]},
+    "previous": {"enum": ["ok", "aviso", "degradado", "critico", "desconocido", "mantenimiento"]},
+    "since": {"type": "string", "format": "date-time"},
+    "explanation": {"type": "string"},
+    "incident_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}

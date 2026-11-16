@@ -1,0 +1,44 @@
+# Base de datos de la plataforma en el clúster CloudNativePG de Vigía (vigia-data/vigia-pg).
+# 1) Añadir el rol gestionado al Cluster existente (fragmento a fusionar en su spec):
+#
+#    spec:
+#      managed:
+#        roles:
+#          - name: contexto
+#            ensure: present
+#            login: true
+#            superuser: false          # importante: RLS no se aplica a superusuarios
+#            passwordSecret: {name: contexto-db-credentials}
+#
+# 2) Secreto con la contraseña del rol (tipo basic-auth), sincronizado desde Vault:
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: contexto-db-credentials
+  namespace: vigia-data
+spec:
+  refreshInterval: 1h
+  secretStoreRef: {kind: ClusterSecretStore, name: vault}
+  target:
+    name: contexto-db-credentials
+    template:
+      type: kubernetes.io/basic-auth
+  data:
+    - secretKey: username
+      remoteRef: {key: secret/vigia/ENTORNO/contexto, property: db-user}
+    - secretKey: password
+      remoteRef: {key: secret/vigia/ENTORNO/contexto, property: db-password}
+---
+# 3) Base de datos propiedad del rol (CloudNativePG 1.25 o superior).
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: contexto
+  namespace: vigia-data
+spec:
+  cluster: {name: vigia-pg}
+  name: contexto
+  owner: contexto
+  extensions:
+    - name: pg_trgm
+      ensure: present

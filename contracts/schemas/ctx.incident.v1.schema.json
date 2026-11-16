@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vigia/contracts/ctx.incident.v1.schema.json",
+  "title": "es.vigia.ctx.incident.opened|updated|resolved.v1 — incidencia correlacionada",
+  "type": "object",
+  "required": ["id", "status", "opened_at", "candidates", "affected", "ssii", "alerts"],
+  "properties": {
+    "id": {"type": "string"},
+    "status": {"enum": ["open", "resolved"]},
+    "opened_at": {"type": "string", "format": "date-time"},
+    "resolved_at": {"type": "string", "format": "date-time"},
+    "candidates": {
+      "type": "array",
+      "description": "Causas probables ordenadas por puntuación, con sus razones",
+      "items": {
+        "type": "object",
+        "required": ["ci_id", "class", "name", "score", "reasons"],
+        "properties": {
+          "ci_id": {"type": "string"},
+          "class": {"type": "string"},
+          "name": {"type": "string"},
+          "score": {"type": "number", "minimum": 0, "maximum": 1},
+          "reasons": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "affected": {
+      "type": "object",
+      "required": ["cis"],
+      "properties": {"cis": {"type": "integer"}, "by_class": {"type": "object", "additionalProperties": {"type": "integer"}}},
+      "additionalProperties": false
+    },
+    "ssii": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "state"],
+        "properties": {"code": {"type": "string"}, "state": {"type": "string"}},
+        "additionalProperties": false
+      }
+    },
+    "alerts": {"type": "integer", "minimum": 0}
+  },
+  "additionalProperties": false
+}

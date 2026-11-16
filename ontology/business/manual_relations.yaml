@@ -1,0 +1,18 @@
+# Relaciones que Prometheus no ve. Formato de cada entrada: 'Prefijo:Nombre => Prefijo:Nombre'.
+relation: pasa por el firewall
+prefixes:
+  F5:
+    classes:
+      - Organismo F5
+      - Organismo en sede
+      - Tenant F5
+      - Partición F5
+    expand:
+      - del organismo
+  Vsys_PA:
+    classes:
+      - Vsys PA
+    name_prefixes:
+      - FW_
+files:
+  - relaciones.txt

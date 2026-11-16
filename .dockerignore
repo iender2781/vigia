@@ -1,0 +1,6 @@
+.git
+**/node_modules
+internal/contexto/web/dist/assets
+internal/contexto/web/dist/index.html
+*.test
+/tmp

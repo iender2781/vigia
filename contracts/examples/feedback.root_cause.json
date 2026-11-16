@@ -1,0 +1,2 @@
+{"specversion":"1.0","id":"01JCB7S0000000000000000000","source":"vigia/web","type":"es.vigia.feedback.root_cause.v1","time":"2026-11-10T08:10:00Z","subject":"incident/inc-412","tenantid":"11111111-2222-3333-4444-555555555555",
+ "data":{"incident_id":"inc-412","ci_id":"0a1b2c3d4e5f6a7b8c9d0e1f","verdict":"confirmada","by":"jperez","at":"2026-11-10T08:09:55Z","resolution":"Reinicio del tenant tras actualización fallida"}}

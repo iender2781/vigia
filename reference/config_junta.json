@@ -1,0 +1,2893 @@
+{
+  "stop_labels": [
+    "__name__",
+    "job",
+    "le",
+    "quantile",
+    "severity",
+    "priority",
+    "team",
+    "owner",
+    "env",
+    "environment",
+    "entorno",
+    "monitor",
+    "prometheus",
+    "prometheus_replica",
+    "replica",
+    "receiver",
+    "alertname",
+    "alertstate",
+    "alertgroup",
+    "fstype",
+    "cpu",
+    "unit",
+    "exporter",
+    "collector",
+    "scrape_job",
+    "site",
+    "nivel",
+    "layer",
+    "category",
+    "aspect",
+    "created_at",
+    "message_id",
+    "alert_group",
+    "alert_category",
+    "source",
+    "event_id",
+    "permission",
+    "generation",
+    "localizacion",
+    "organismo",
+    "basado",
+    "servicio",
+    "job_env",
+    "capa_monitor",
+    "tipo_monitor",
+    "logica",
+    "tier",
+    "f5_port",
+    "field",
+    "column",
+    "window",
+    "tmm",
+    "sensor",
+    "ifindex",
+    "fsindex",
+    "is_bundle",
+    "key_size",
+    "key_type",
+    "issuer_cn",
+    "netmask",
+    "gateway",
+    "mtu",
+    "mac",
+    "alloc_type",
+    "sync_state",
+    "running_state",
+    "phase",
+    "primary_slot",
+    "image_version",
+    "nodes",
+    "result",
+    "sequence",
+    "tipo",
+    "profile",
+    "vs_partition",
+    "message",
+    "endpoint",
+    "protocolo",
+    "part_no",
+    "serial",
+    "tpm_status",
+    "path",
+    "driver",
+    "build",
+    "full_name",
+    "tag",
+    "object",
+    "object_type",
+    "acknowledged",
+    "alarm",
+    "entity_type",
+    "startup_type",
+    "ntp",
+    "interface",
+    "mountpoint",
+    "panos_counter",
+    "bridge_method",
+    "cmdb_source",
+    "NB_LAST_BACKUP",
+    "IP_GW",
+    "TLS_RenovacionURL",
+    "tags",
+    "guest_partition",
+    "rotational",
+    "major",
+    "minor",
+    "uuid",
+    "lv_name",
+    "vg_name",
+    "mitigation",
+    "clocksource",
+    "codename",
+    "peer_mgmt_ip"
+  ],
+  "relabel": [
+    {
+      "when": {
+        "job": "veeam_node"
+      },
+      "rename": {
+        "name": "veeam_item"
+      }
+    },
+    {
+      "when": {
+        "job": "vmware_.*"
+      },
+      "rename": {
+        "partition": "guest_partition"
+      }
+    },
+    {
+      "when": {
+        "job": "panos_exporter"
+      },
+      "rename": {
+        "name": "panos_counter"
+      }
+    },
+    {
+      "when": {
+        "entity_type": "HostSystem"
+      },
+      "rename": {
+        "entity": "esxi_host"
+      }
+    },
+    {
+      "when": {
+        "vcenter": ".+"
+      },
+      "rename": {
+        "host": "esxi_host"
+      }
+    },
+    {
+      "when": {
+        "role": "tenant"
+      },
+      "rename": {
+        "name": "f5_tenant",
+        "pool": "f5_pool",
+        "node": "f5_node",
+        "address": "f5_node_address",
+        "partition": "f5_partition",
+        "virtual_server": "f5_virtual_server",
+        "port": "f5_port"
+      }
+    },
+    {
+      "when": {
+        "role": "chassis_partition"
+      },
+      "rename": {
+        "name": "f5_chassis_partition",
+        "tenant": "f5_tenant",
+        "node": "f5_blade"
+      }
+    },
+    {
+      "when": {
+        "servicio": "f5.*"
+      },
+      "rename": {
+        "name": "f5_tenant",
+        "pool": "f5_pool",
+        "node": "f5_node",
+        "address": "f5_node_address",
+        "partition": "f5_partition",
+        "virtual_server": "f5_virtual_server",
+        "port": "f5_port"
+      }
+    }
+  ],
+  "fanout_overrides": {
+    "f5_node": 500,
+    "f5_node_address": 500
+  },
+  "host_rewrite": [
+    [
+      "^[a-z]{2,6}_(?=[a-z0-9-]+$)",
+      ""
+    ]
+  ],
+  "datastore_lun_bridge": {
+    "datastore_metric": "vsphere_datastore_capacity_bytes",
+    "datastore_regex": "^(?P<site>S\\d\\d)(?P<code>CA[HS]\\d\\d)_(?P<org>[A-Za-z0-9]+)_.*?VC\\d\\d-(?P<core>.+)_(?P<idx>[0-9A-Fa-f]+)$",
+    "lun_sources": [
+      {
+        "metric": "unity_lun_size_total_bytes",
+        "label": "name",
+        "array_label": "array",
+        "code_metric": "unity_pool_size_total_bytes",
+        "code_from": "instance",
+        "code_regex": "(s\\d\\d)-a-(cah\\d\\d)",
+        "size_metric": "unity_lun_size_total_bytes"
+      }
+    ],
+    "datastore_size_metric": "vsphere_datastore_capacity_bytes"
+  },
+  "cmdb_model": {
+    "rules": [
+      {
+        "metric": "vsphere_datastore_capacity_bytes",
+        "cis": {
+          "ds": {
+            "type": "Datastore",
+            "key": [
+              "vcenter",
+              "datastore"
+            ]
+          },
+          "vc": {
+            "type": "vCenter",
+            "key": [
+              "vcenter"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "ds",
+            "pertenece a",
+            "vc"
+          ]
+        ]
+      },
+      {
+        "metric": "vsphere_cluster_hosts",
+        "cis": {
+          "cl": {
+            "type": "Clúster vSphere",
+            "key": [
+              "vcenter",
+              "cluster"
+            ]
+          },
+          "vc": {
+            "type": "vCenter",
+            "key": [
+              "vcenter"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "cl",
+            "pertenece a",
+            "vc"
+          ]
+        ]
+      },
+      {
+        "metric": "vsphere_host_overall_status",
+        "cis": {
+          "esx": {
+            "type": "ESXi",
+            "key": [
+              "host"
+            ]
+          },
+          "cl": {
+            "type": "Clúster vSphere",
+            "key": [
+              "vcenter",
+              "cluster"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "esx",
+            "pertenece a",
+            "cl"
+          ]
+        ]
+      },
+      {
+        "metric": "vsphere_host_hardware_info",
+        "cis": {
+          "esx": {
+            "type": "ESXi",
+            "key": [
+              "host"
+            ],
+            "attrs": {
+              "Modelo": "model",
+              "Fabricante": "vendor"
+            }
+          }
+        }
+      },
+      {
+        "metric": "vsphere_host_product_info",
+        "cis": {
+          "esx": {
+            "type": "ESXi",
+            "key": [
+              "host"
+            ],
+            "attrs": {
+              "Versión": "full_name"
+            }
+          }
+        }
+      },
+      {
+        "metric": "vsphere_vm_power_state",
+        "cis": {
+          "vm": {
+            "type": "VM",
+            "key": [
+              "vcenter",
+              "vm"
+            ]
+          },
+          "esx": {
+            "type": "ESXi",
+            "key": [
+              "host"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "vm",
+            "se ejecuta en",
+            "esx"
+          ]
+        ]
+      },
+      {
+        "metric": "vsphere_vm_datastore_info",
+        "cis": {
+          "vm": {
+            "type": "VM",
+            "key": [
+              "vcenter",
+              "vm"
+            ]
+          },
+          "ds": {
+            "type": "Datastore",
+            "key": [
+              "vcenter",
+              "datastore"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "vm",
+            "usa",
+            "ds"
+          ]
+        ]
+      },
+      {
+        "metric": "unity_lun_size_total_bytes",
+        "cis": {
+          "lun": {
+            "type": "LUN",
+            "key": [
+              "array",
+              "name"
+            ]
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "array"
+            ],
+            "attrs": {
+              "Gestión": "instance",
+              "Fabricante": "vendor"
+            }
+          }
+        },
+        "rels": [
+          [
+            "lun",
+            "está en",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "metric": "unity_pool_size_total_bytes",
+        "cis": {
+          "pool": {
+            "type": "Pool",
+            "key": [
+              "array",
+              "name"
+            ]
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "array"
+            ],
+            "attrs": {
+              "Gestión": "instance",
+              "Fabricante": "vendor"
+            }
+          }
+        },
+        "rels": [
+          [
+            "pool",
+            "está en",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "metric": "unity_filesystem_size_total_bytes",
+        "cis": {
+          "fs": {
+            "type": "Filesystem",
+            "key": [
+              "array",
+              "name"
+            ]
+          },
+          "nas": {
+            "type": "NAS server",
+            "key": [
+              "array",
+              "nasserver"
+            ]
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "array"
+            ],
+            "attrs": {
+              "Gestión": "instance",
+              "Fabricante": "vendor"
+            }
+          }
+        },
+        "rels": [
+          [
+            "fs",
+            "servido por",
+            "nas"
+          ],
+          [
+            "nas",
+            "está en",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "metric": "oceanstor_system_info",
+        "cis": {
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "sede"
+            ],
+            "name": "name",
+            "set_name": true,
+            "attrs": {
+              "Modelo": "model",
+              "Serie": "serial",
+              "Versión": "version",
+              "Ubicación": "location",
+              "WWN": "wwn"
+            }
+          }
+        }
+      },
+      {
+        "metric": "oceanstor_pool_capacity_bytes",
+        "cis": {
+          "pool": {
+            "type": "Pool",
+            "key": [
+              "sede",
+              "pool"
+            ]
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "sede"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "pool",
+            "está en",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "metric": "oceanstor_vstore_info",
+        "cis": {
+          "vst": {
+            "type": "vStore",
+            "key": [
+              "sede",
+              "vstore"
+            ]
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "sede"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "vst",
+            "está en",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "metric": "oceanstor_lun_info",
+        "cis": {
+          "lun": {
+            "type": "LUN",
+            "key": [
+              "sede",
+              "lun"
+            ],
+            "attrs": {
+              "WWN": "wwn",
+              "Asignación": "alloc_type"
+            }
+          },
+          "pool": {
+            "type": "Pool",
+            "key": [
+              "sede",
+              "pool"
+            ]
+          },
+          "vst": {
+            "type": "vStore",
+            "key": [
+              "sede",
+              "vstore"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "lun",
+            "está en",
+            "pool"
+          ],
+          [
+            "lun",
+            "pertenece a",
+            "vst"
+          ]
+        ]
+      },
+      {
+        "metric": "oceanstor_filesystem_info",
+        "cis": {
+          "fs": {
+            "type": "Filesystem",
+            "key": [
+              "sede",
+              "filesystem"
+            ]
+          },
+          "pool": {
+            "type": "Pool",
+            "key": [
+              "sede",
+              "pool"
+            ]
+          },
+          "vst": {
+            "type": "vStore",
+            "key": [
+              "sede",
+              "vstore"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "fs",
+            "está en",
+            "pool"
+          ],
+          [
+            "fs",
+            "pertenece a",
+            "vst"
+          ]
+        ]
+      },
+      {
+        "metric": "oceanstor_host_info",
+        "cis": {
+          "h": {
+            "type": "Host en cabina",
+            "key": [
+              "sede",
+              "host"
+            ]
+          },
+          "hg": {
+            "type": "Host group",
+            "key": [
+              "sede",
+              "hostgroup"
+            ]
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "sede"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "h",
+            "miembro de",
+            "hg"
+          ],
+          [
+            "hg",
+            "definido en",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "metric": "oceanstor_host_lun_info",
+        "cis": {
+          "h": {
+            "type": "Host en cabina",
+            "key": [
+              "sede",
+              "host"
+            ]
+          },
+          "lun": {
+            "type": "LUN",
+            "key": [
+              "sede",
+              "lun"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "h",
+            "usa",
+            "lun"
+          ]
+        ]
+      },
+      {
+        "metric": "f5os_component_info",
+        "where": {
+          "component": "chassis"
+        },
+        "cis": {
+          "ch": {
+            "type": "Chasis F5",
+            "key": [
+              "chassis"
+            ],
+            "attrs": {
+              "Modelo": "model",
+              "Serie": "serial",
+              "Sede": "site"
+            }
+          }
+        }
+      },
+      {
+        "metric": "f5os_tenant_info",
+        "cis": {
+          "ten": {
+            "type": "Tenant F5",
+            "key": [
+              "tenant"
+            ],
+            "attrs": {
+              "Imagen": "image_version"
+            }
+          },
+          "ch": {
+            "type": "Chasis F5",
+            "key": [
+              "chassis"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "ten",
+            "se ejecuta en",
+            "ch"
+          ]
+        ]
+      },
+      {
+        "metric": "f5_bigip_virtual_server_enabled_state",
+        "computed": {
+          "organismo_base": [
+            "organismo",
+            "^(.*?)(?:_(?:CICA|ZOCO))?$"
+          ]
+        },
+        "cis": {
+          "vs": {
+            "type": "Virtual server F5",
+            "key": [
+              "name",
+              "partition",
+              "virtual_server"
+            ],
+            "name": "virtual_server"
+          },
+          "part": {
+            "type": "Partición F5",
+            "key": [
+              "name",
+              "partition"
+            ],
+            "name": "partition"
+          },
+          "ten": {
+            "type": "Tenant F5",
+            "key": [
+              "name"
+            ],
+            "attrs": {
+              "Gestión": "instance"
+            }
+          },
+          "orgs": {
+            "type": "Organismo en sede",
+            "key": [
+              "organismo"
+            ],
+            "name": "organismo",
+            "attrs": {
+              "Sede": "site",
+              "Basado": "basado"
+            }
+          },
+          "org": {
+            "type": "Organismo F5",
+            "key": [
+              "organismo_base"
+            ],
+            "name": "organismo_base"
+          }
+        },
+        "rels": [
+          [
+            "vs",
+            "definido en",
+            "part"
+          ],
+          [
+            "part",
+            "definida en",
+            "ten"
+          ],
+          [
+            "ten",
+            "del organismo",
+            "orgs"
+          ],
+          [
+            "orgs",
+            "del organismo",
+            "org"
+          ]
+        ]
+      },
+      {
+        "metric": "f5_bigip_virtual_server_availability_state",
+        "cis": {
+          "vs": {
+            "type": "Virtual server F5",
+            "key": [
+              "name",
+              "partition",
+              "virtual_server"
+            ],
+            "name": "virtual_server"
+          },
+          "pool": {
+            "type": "Pool F5",
+            "key": [
+              "name",
+              "partition",
+              "pool"
+            ],
+            "name": "pool"
+          }
+        },
+        "rels": [
+          [
+            "vs",
+            "usa",
+            "pool"
+          ]
+        ]
+      },
+      {
+        "metric": "f5_bigip_pool_availability_state",
+        "cis": {
+          "pool": {
+            "type": "Pool F5",
+            "key": [
+              "name",
+              "partition",
+              "pool"
+            ],
+            "name": "pool"
+          },
+          "part": {
+            "type": "Partición F5",
+            "key": [
+              "name",
+              "partition"
+            ],
+            "name": "partition"
+          },
+          "ten": {
+            "type": "Tenant F5",
+            "key": [
+              "name"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "pool",
+            "definido en",
+            "part"
+          ],
+          [
+            "part",
+            "definida en",
+            "ten"
+          ]
+        ]
+      },
+      {
+        "metric": "f5_bigip_pool_member_availability_state",
+        "computed": {
+          "member": {
+            "format": "{node}:{port}"
+          }
+        },
+        "cis": {
+          "pool": {
+            "type": "Pool F5",
+            "key": [
+              "name",
+              "partition",
+              "pool"
+            ],
+            "name": "pool"
+          },
+          "mem": {
+            "type": "Miembro F5",
+            "key": [
+              "name",
+              "partition",
+              "pool",
+              "node",
+              "port"
+            ],
+            "name": "member",
+            "attrs": {
+              "Puerto": "port",
+              "Disponibilidad": "state"
+            }
+          },
+          "node": {
+            "type": "Nodo F5",
+            "key": [
+              "name",
+              "partition",
+              "node"
+            ],
+            "name": "node"
+          }
+        },
+        "rels": [
+          [
+            "pool",
+            "balancea a",
+            "mem"
+          ],
+          [
+            "mem",
+            "apunta a",
+            "node"
+          ]
+        ]
+      },
+      {
+        "metric": "f5_bigip_node_availability_state",
+        "cis": {
+          "node": {
+            "type": "Nodo F5",
+            "key": [
+              "name",
+              "partition",
+              "node"
+            ],
+            "name": "node",
+            "attrs": {
+              "IP": "address",
+              "Estado nodo": "state"
+            }
+          },
+          "part": {
+            "type": "Partición F5",
+            "key": [
+              "name",
+              "partition"
+            ],
+            "name": "partition"
+          },
+          "ten": {
+            "type": "Tenant F5",
+            "key": [
+              "name"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "node",
+            "definido en",
+            "part"
+          ],
+          [
+            "part",
+            "definida en",
+            "ten"
+          ]
+        ]
+      },
+      {
+        "metric_regex": "f5os_(memory|cpu_utilization)_.*",
+        "where": {
+          "role": "chassis_partition"
+        },
+        "cis": {
+          "cp": {
+            "type": "Chassis partition F5",
+            "key": [
+              "name"
+            ]
+          },
+          "ch": {
+            "type": "Chasis F5",
+            "key": [
+              "chassis"
+            ]
+          },
+          "comp": {
+            "type": "Componente F5",
+            "key": [
+              "chassis",
+              "component"
+            ],
+            "name": "component"
+          }
+        },
+        "rels": [
+          [
+            "cp",
+            "se ejecuta en",
+            "ch"
+          ],
+          [
+            "comp",
+            "de",
+            "cp"
+          ]
+        ]
+      },
+      {
+        "metric": "f5os_component_info",
+        "cis": {
+          "comp": {
+            "type": "Componente F5",
+            "key": [
+              "chassis",
+              "component"
+            ],
+            "name": "component",
+            "attrs": {
+              "Modelo": "model",
+              "Serie": "serial",
+              "Tipo": "type"
+            }
+          },
+          "ch": {
+            "type": "Chasis F5",
+            "key": [
+              "chassis"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "comp",
+            "instalado en",
+            "ch"
+          ]
+        ]
+      },
+      {
+        "metric": "panos_device_info",
+        "computed": {
+          "fw_ip": {
+            "first": [
+              "exported_instance",
+              "instance"
+            ],
+            "regex": "^\\[?([^\\]:/]+)"
+          },
+          "fw_site": {
+            "from": "fw_ip",
+            "map_regex": {
+              "^10\\.47\\.208\\.1[12]$": "CICA",
+              "^10\\.47\\.208\\.13[12]$": "ZOCO"
+            },
+            "default": "Sin sede"
+          },
+          "fw_cluster": {
+            "format": "Firewalls PA {fw_site}"
+          }
+        },
+        "cis": {
+          "fw": {
+            "type": "Firewall PA",
+            "key": [
+              "fw_ip"
+            ],
+            "name": "hostname",
+            "set_name": true,
+            "attrs": {
+              "IP": "fw_ip",
+              "Modelo": "model",
+              "Serie": "serial",
+              "Versión PAN-OS": "sw_version",
+              "Multi-vsys": "multi_vsys",
+              "Sede": "fw_site"
+            }
+          },
+          "cl": {
+            "type": "Clúster HA PA",
+            "key": [
+              "fw_site"
+            ],
+            "name": "fw_cluster",
+            "attrs": {
+              "Sede": "fw_site"
+            }
+          }
+        },
+        "rels": [
+          [
+            "fw",
+            "miembro de",
+            "cl"
+          ]
+        ]
+      },
+      {
+        "metric": "panos_ha_local_state",
+        "computed": {
+          "fw_ip": {
+            "first": [
+              "exported_instance",
+              "instance"
+            ],
+            "regex": "^\\[?([^\\]:/]+)"
+          },
+          "fw_site": {
+            "from": "fw_ip",
+            "map_regex": {
+              "^10\\.47\\.208\\.1[12]$": "CICA",
+              "^10\\.47\\.208\\.13[12]$": "ZOCO"
+            },
+            "default": "Sin sede"
+          },
+          "fw_cluster": {
+            "format": "Firewalls PA {fw_site}"
+          },
+          "ha": {
+            "format": "{state} ({mode})"
+          }
+        },
+        "cis": {
+          "fw": {
+            "type": "Firewall PA",
+            "key": [
+              "fw_ip"
+            ],
+            "name": "instance",
+            "attrs": {
+              "Estado HA": "ha"
+            }
+          },
+          "cl": {
+            "type": "Clúster HA PA",
+            "key": [
+              "fw_site"
+            ],
+            "name": "fw_cluster",
+            "attrs": {
+              "Sede": "fw_site"
+            }
+          }
+        },
+        "rels": [
+          [
+            "fw",
+            "miembro de",
+            "cl"
+          ]
+        ]
+      },
+      {
+        "metric": "panos_ha_peer_state",
+        "computed": {
+          "fw_ip": {
+            "first": [
+              "exported_instance",
+              "instance"
+            ],
+            "regex": "^\\[?([^\\]:/]+)"
+          },
+          "fw_site": {
+            "from": "fw_ip",
+            "map_regex": {
+              "^10\\.47\\.208\\.1[12]$": "CICA",
+              "^10\\.47\\.208\\.13[12]$": "ZOCO"
+            },
+            "default": "Sin sede"
+          },
+          "fw_cluster": {
+            "format": "Firewalls PA {fw_site}"
+          },
+          "pair": {
+            "sorted": [
+              "fw_ip",
+              "peer_mgmt_ip"
+            ],
+            "sep": " / "
+          }
+        },
+        "cis": {
+          "cl": {
+            "type": "Clúster HA PA",
+            "key": [
+              "fw_site"
+            ],
+            "name": "fw_cluster",
+            "attrs": {
+              "Pareja HA": "pair"
+            }
+          }
+        },
+        "rels": []
+      },
+      {
+        "metric": "panos_vsys_info",
+        "computed": {
+          "fw_ip": {
+            "first": [
+              "exported_instance",
+              "instance"
+            ],
+            "regex": "^\\[?([^\\]:/]+)"
+          },
+          "fw_site": {
+            "from": "fw_ip",
+            "map_regex": {
+              "^10\\.47\\.208\\.1[12]$": "CICA",
+              "^10\\.47\\.208\\.13[12]$": "ZOCO"
+            },
+            "default": "Sin sede"
+          },
+          "fw_cluster": {
+            "format": "Firewalls PA {fw_site}"
+          }
+        },
+        "cis": {
+          "vs": {
+            "type": "Vsys PA",
+            "key": [
+              "fw_site",
+              "display_name"
+            ],
+            "name": "display_name",
+            "attrs": {
+              "Vsys": "vsys",
+              "Sede": "fw_site"
+            }
+          },
+          "fw": {
+            "type": "Firewall PA",
+            "key": [
+              "fw_ip"
+            ],
+            "name": "instance"
+          },
+          "cl": {
+            "type": "Clúster HA PA",
+            "key": [
+              "fw_site"
+            ],
+            "name": "fw_cluster",
+            "attrs": {
+              "Sede": "fw_site"
+            }
+          }
+        },
+        "rels": [
+          [
+            "vs",
+            "se ejecuta en",
+            "fw"
+          ],
+          [
+            "vs",
+            "definido en",
+            "cl"
+          ]
+        ]
+      },
+      {
+        "metric": "panos_interface_physical_up",
+        "computed": {
+          "fw_ip": {
+            "first": [
+              "exported_instance",
+              "instance"
+            ],
+            "regex": "^\\[?([^\\]:/]+)"
+          },
+          "fw_site": {
+            "from": "fw_ip",
+            "map_regex": {
+              "^10\\.47\\.208\\.1[12]$": "CICA",
+              "^10\\.47\\.208\\.13[12]$": "ZOCO"
+            },
+            "default": "Sin sede"
+          }
+        },
+        "cis": {
+          "if": {
+            "type": "Interfaz PA",
+            "key": [
+              "fw_ip",
+              "interface"
+            ],
+            "name": "interface",
+            "attrs": {
+              "Estado": "state",
+              "Dúplex": "duplex"
+            }
+          },
+          "fw": {
+            "type": "Firewall PA",
+            "key": [
+              "fw_ip"
+            ],
+            "name": "instance"
+          }
+        },
+        "rels": [
+          [
+            "if",
+            "de",
+            "fw"
+          ]
+        ]
+      },
+      {
+        "metric": "ibm_flashsystem_system_info",
+        "where": {
+          "job": "flashsystem"
+        },
+        "computed": {
+          "vendor": {
+            "format": "IBM"
+          }
+        },
+        "cis": {
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "instance"
+            ],
+            "name": "system_name",
+            "set_name": true,
+            "attrs": {
+              "Fabricante": "vendor",
+              "Modelo": "product_name",
+              "Versión": "code_level",
+              "ID sistema": "system_id",
+              "Topología": "topology",
+              "Gestión": "instance"
+            }
+          }
+        },
+        "rels": []
+      },
+      {
+        "metric": "ibm_flashsystem_partnership_healthy",
+        "where": {
+          "job": "flashsystem"
+        },
+        "computed": {
+          "rep": {
+            "format": "{partner} ({state}, {type})"
+          }
+        },
+        "cis": {
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "instance"
+            ],
+            "attrs": {
+              "Réplica con": "rep"
+            }
+          }
+        },
+        "rels": []
+      },
+      {
+        "metric": "ibm_flashsystem_pool_healthy",
+        "where": {
+          "job": "flashsystem"
+        },
+        "cis": {
+          "pool": {
+            "type": "Pool",
+            "key": [
+              "instance",
+              "pool"
+            ],
+            "name": "pool",
+            "attrs": {
+              "Estado": "status",
+              "Tipo": "type",
+              "Easy Tier": "easy_tier",
+              "Reducción de datos": "data_reduction"
+            }
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "instance"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "pool",
+            "está en",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "metric": "ibm_flashsystem_volume_info",
+        "where": {
+          "job": "flashsystem"
+        },
+        "cis": {
+          "lun": {
+            "type": "LUN",
+            "key": [
+              "instance",
+              "volume"
+            ],
+            "name": "volume",
+            "attrs": {
+              "WWN": "uid",
+              "Asignación": "capacity_type",
+              "Grupo de volúmenes": "volume_group",
+              "Espejo": "mirrored"
+            }
+          },
+          "pool": {
+            "type": "Pool",
+            "key": [
+              "instance",
+              "pool"
+            ],
+            "name": "pool"
+          }
+        },
+        "rels": [
+          [
+            "lun",
+            "está en",
+            "pool"
+          ]
+        ]
+      },
+      {
+        "metric": "ibm_flashsystem_volume_healthy",
+        "where": {
+          "job": "flashsystem"
+        },
+        "cis": {
+          "lun": {
+            "type": "LUN",
+            "key": [
+              "instance",
+              "volume"
+            ],
+            "name": "volume",
+            "attrs": {
+              "Estado": "status"
+            }
+          }
+        },
+        "rels": []
+      },
+      {
+        "metric": "ibm_flashsystem_host_cluster_healthy",
+        "where": {
+          "job": "flashsystem"
+        },
+        "cis": {
+          "hc": {
+            "type": "Host group",
+            "key": [
+              "instance",
+              "host_cluster"
+            ],
+            "name": "host_cluster",
+            "attrs": {
+              "Estado": "status"
+            }
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "instance"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "hc",
+            "definido en",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "metric": "ibm_flashsystem_host_healthy",
+        "where": {
+          "job": "flashsystem"
+        },
+        "cis": {
+          "h": {
+            "type": "Host en cabina",
+            "key": [
+              "instance",
+              "host"
+            ],
+            "name": "host",
+            "attrs": {
+              "Estado": "status",
+              "Protocolo": "protocol",
+              "Partición": "partition"
+            }
+          },
+          "hc": {
+            "type": "Host group",
+            "key": [
+              "instance",
+              "host_cluster"
+            ],
+            "name": "host_cluster"
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "instance"
+            ]
+          },
+          "part": {
+            "type": "Partición HA IBM",
+            "key": [
+              "partition"
+            ],
+            "name": "partition"
+          }
+        },
+        "rels": [
+          [
+            "h",
+            "miembro de",
+            "hc"
+          ],
+          [
+            "h",
+            "definido en",
+            "arr"
+          ],
+          [
+            "h",
+            "en la partición",
+            "part"
+          ]
+        ]
+      },
+      {
+        "metric": "ibm_flashsystem_lun_mapping",
+        "where": {
+          "job": "flashsystem"
+        },
+        "cis": {
+          "h": {
+            "type": "Host en cabina",
+            "key": [
+              "instance",
+              "host"
+            ],
+            "name": "host"
+          },
+          "lun": {
+            "type": "LUN",
+            "key": [
+              "instance",
+              "volume"
+            ],
+            "name": "volume"
+          }
+        },
+        "rels": [
+          [
+            "h",
+            "usa",
+            "lun",
+            {
+              "SCSI id": "scsi_id",
+              "Tipo de mapeo": "mapping_type"
+            }
+          ]
+        ]
+      },
+      {
+        "metric": "ibm_flashsystem_partition_info",
+        "where": {
+          "job": "flashsystem"
+        },
+        "cis": {
+          "part": {
+            "type": "Partición HA IBM",
+            "key": [
+              "partition"
+            ],
+            "name": "partition",
+            "attrs": {
+              "Ubicación 1": "location1_system",
+              "Ubicación 2": "location2_system",
+              "Activa en": "active_system",
+              "Preferida": "preferred_system",
+              "Política HA": "ha_policy"
+            }
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "instance"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "part",
+            "replicada en",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "metric": "ibm_flashsystem_partition_ha_state",
+        "where": {
+          "job": "flashsystem"
+        },
+        "cis": {
+          "part": {
+            "type": "Partición HA IBM",
+            "key": [
+              "partition"
+            ],
+            "name": "partition",
+            "attrs": {
+              "Estado HA": "ha_status",
+              "Enlace": "link_status"
+            }
+          }
+        },
+        "rels": []
+      },
+      {
+        "metric": "ibm_flashsystem_node_healthy",
+        "where": {
+          "job": "flashsystem"
+        },
+        "computed": {
+          "comp": {
+            "format": "Nodo {node}"
+          },
+          "ctype": {
+            "format": "Nodo"
+          }
+        },
+        "cis": {
+          "c": {
+            "type": "Componente de cabina",
+            "key": [
+              "instance",
+              "comp"
+            ],
+            "name": "comp",
+            "attrs": {
+              "Tipo": "ctype",
+              "Estado": "status",
+              "Nodo de configuración": "config_node",
+              "I/O group": "io_group"
+            }
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "instance"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "c",
+            "de",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "metric": "ibm_flashsystem_enclosure_healthy",
+        "where": {
+          "job": "flashsystem"
+        },
+        "computed": {
+          "comp": {
+            "format": "Enclosure {enclosure_id}"
+          },
+          "ctype": {
+            "format": "Enclosure"
+          }
+        },
+        "cis": {
+          "c": {
+            "type": "Componente de cabina",
+            "key": [
+              "instance",
+              "comp"
+            ],
+            "name": "comp",
+            "attrs": {
+              "Tipo": "ctype",
+              "Estado": "status",
+              "MTM": "mtm",
+              "Serie": "serial",
+              "Función": "type"
+            }
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "instance"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "c",
+            "de",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "metric": "ibm_flashsystem_psu_healthy",
+        "where": {
+          "job": "flashsystem"
+        },
+        "computed": {
+          "comp": {
+            "format": "Fuente {enclosure_id}-{psu_id}"
+          },
+          "ctype": {
+            "format": "Fuente de alimentación"
+          }
+        },
+        "cis": {
+          "c": {
+            "type": "Componente de cabina",
+            "key": [
+              "instance",
+              "comp"
+            ],
+            "name": "comp",
+            "attrs": {
+              "Tipo": "ctype",
+              "Estado": "status"
+            }
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "instance"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "c",
+            "de",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "metric": "ibm_flashsystem_battery_healthy",
+        "where": {
+          "job": "flashsystem"
+        },
+        "computed": {
+          "comp": {
+            "format": "Batería {battery_id}"
+          },
+          "ctype": {
+            "format": "Batería"
+          }
+        },
+        "cis": {
+          "c": {
+            "type": "Componente de cabina",
+            "key": [
+              "instance",
+              "comp"
+            ],
+            "name": "comp",
+            "attrs": {
+              "Tipo": "ctype",
+              "Estado": "status",
+              "Carga": "charging_status",
+              "Ubicación": "location"
+            }
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "instance"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "c",
+            "de",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "metric": "ibm_flashsystem_array_healthy",
+        "where": {
+          "job": "flashsystem"
+        },
+        "computed": {
+          "comp": {
+            "format": "Array {mdisk}"
+          },
+          "ctype": {
+            "format": "Array RAID"
+          }
+        },
+        "cis": {
+          "c": {
+            "type": "Componente de cabina",
+            "key": [
+              "instance",
+              "comp"
+            ],
+            "name": "comp",
+            "attrs": {
+              "Tipo": "ctype",
+              "Estado": "status",
+              "RAID": "raid_level",
+              "Estado RAID": "raid_status",
+              "Tier": "tier"
+            }
+          },
+          "pool": {
+            "type": "Pool",
+            "key": [
+              "instance",
+              "pool"
+            ],
+            "name": "pool"
+          }
+        },
+        "rels": [
+          [
+            "pool",
+            "sobre",
+            "c"
+          ]
+        ]
+      },
+      {
+        "metric": "ibm_flashsystem_array_healthy",
+        "where": {
+          "job": "flashsystem"
+        },
+        "computed": {
+          "comp": {
+            "format": "Array {mdisk}"
+          }
+        },
+        "cis": {
+          "c": {
+            "type": "Componente de cabina",
+            "key": [
+              "instance",
+              "comp"
+            ],
+            "name": "comp"
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "instance"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "c",
+            "de",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "source": "alerts",
+        "where": {
+          "role": "chassis_partition",
+          "component": ".+"
+        },
+        "cis": {
+          "cp": {
+            "type": "Chassis partition F5",
+            "key": [
+              "name"
+            ]
+          },
+          "comp": {
+            "type": "Componente F5",
+            "key": [
+              "chassis",
+              "component"
+            ],
+            "name": "component"
+          },
+          "ch": {
+            "type": "Chasis F5",
+            "key": [
+              "chassis"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "comp",
+            "de",
+            "cp"
+          ],
+          [
+            "cp",
+            "se ejecuta en",
+            "ch"
+          ]
+        ]
+      },
+      {
+        "source": "alerts",
+        "where": {
+          "role": "tenant",
+          "alertname": "F5S.*"
+        },
+        "cis": {
+          "ten": {
+            "type": "Tenant F5",
+            "key": [
+              "name"
+            ]
+          },
+          "ch": {
+            "type": "Chasis F5",
+            "key": [
+              "chassis"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "ten",
+            "se ejecuta en",
+            "ch"
+          ]
+        ]
+      },
+      {
+        "metric": "oceanstor_lungroup_member_info",
+        "cis": {
+          "lg": {
+            "type": "LUN group",
+            "key": [
+              "sede",
+              "lungroup"
+            ]
+          },
+          "lun": {
+            "type": "LUN",
+            "key": [
+              "sede",
+              "lun"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "lg",
+            "contiene",
+            "lun"
+          ]
+        ]
+      },
+      {
+        "metric": "oceanstor_mapping_view_info",
+        "where": {
+          "kind": "group"
+        },
+        "cis": {
+          "hg": {
+            "type": "Host group",
+            "key": [
+              "sede",
+              "hostgroup"
+            ]
+          },
+          "lg": {
+            "type": "LUN group",
+            "key": [
+              "sede",
+              "lungroup"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "hg",
+            "usa",
+            "lg"
+          ]
+        ]
+      },
+      {
+        "source": "alerts",
+        "where": {
+          "alertname": "OceanStorFilesystem.*"
+        },
+        "cis": {
+          "fs": {
+            "type": "Filesystem",
+            "key": [
+              "sede",
+              "location"
+            ]
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "sede"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "fs",
+            "está en",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "source": "alerts",
+        "where": {
+          "job": "flashsystem"
+        },
+        "cis": {
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "instance"
+            ]
+          }
+        }
+      },
+      {
+        "source": "alerts",
+        "where": {
+          "job": "flashsystem",
+          "host_cluster": ".+"
+        },
+        "cis": {
+          "hc": {
+            "type": "Host group",
+            "key": [
+              "instance",
+              "host_cluster"
+            ],
+            "name": "host_cluster"
+          },
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "instance"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "hc",
+            "definido en",
+            "arr"
+          ]
+        ]
+      },
+      {
+        "source": "alerts",
+        "where": {
+          "job": "flashsystem",
+          "host": ".+"
+        },
+        "cis": {
+          "h": {
+            "type": "Host en cabina",
+            "key": [
+              "instance",
+              "host"
+            ],
+            "name": "host"
+          },
+          "hc": {
+            "type": "Host group",
+            "key": [
+              "instance",
+              "host_cluster"
+            ],
+            "name": "host_cluster"
+          }
+        },
+        "rels": [
+          [
+            "h",
+            "miembro de",
+            "hc"
+          ]
+        ]
+      },
+      {
+        "source": "alerts",
+        "where": {
+          "job": "unity",
+          "path": ".+",
+          "filesystem": ".+"
+        },
+        "cis": {
+          "q": {
+            "type": "Quota",
+            "key": [
+              "array",
+              "filesystem",
+              "path"
+            ],
+            "name": "path"
+          },
+          "fs": {
+            "type": "Filesystem",
+            "key": [
+              "array",
+              "filesystem"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "q",
+            "de",
+            "fs"
+          ]
+        ]
+      },
+      {
+        "source": "alerts",
+        "where": {
+          "job": "unity",
+          "array": ".+"
+        },
+        "cis": {
+          "arr": {
+            "type": "Cabina",
+            "key": [
+              "array"
+            ]
+          }
+        }
+      },
+      {
+        "source": "alerts",
+        "where": {
+          "vcenter": ".+"
+        },
+        "cis": {
+          "vc": {
+            "type": "vCenter",
+            "key": [
+              "vcenter"
+            ]
+          }
+        }
+      },
+      {
+        "metric": "f5_bigip_pool_member_enabled_state",
+        "computed": {
+          "member": {
+            "format": "{node}:{port}"
+          }
+        },
+        "cis": {
+          "mem": {
+            "type": "Miembro F5",
+            "key": [
+              "name",
+              "partition",
+              "pool",
+              "node",
+              "port"
+            ],
+            "name": "member",
+            "attrs": {
+              "Estado admin": "state"
+            }
+          }
+        }
+      },
+      {
+        "metric": "f5_bigip_monitor_info",
+        "cis": {
+          "mon": {
+            "type": "Monitor F5",
+            "key": [
+              "name",
+              "monitor"
+            ],
+            "name": "monitor",
+            "attrs": {
+              "Tipo": "tipo_monitor",
+              "Capa": "capa_monitor"
+            }
+          },
+          "ten": {
+            "type": "Tenant F5",
+            "key": [
+              "name"
+            ]
+          }
+        },
+        "rels": [
+          [
+            "mon",
+            "definido en",
+            "ten"
+          ]
+        ]
+      },
+      {
+        "metric": "f5_bigip_pool_monitor_info",
+        "cis": {
+          "pool": {
+            "type": "Pool F5",
+            "key": [
+              "name",
+              "partition",
+              "pool"
+            ],
+            "name": "pool",
+            "attrs": {
+              "Lógica de monitores": "logica"
+            }
+          },
+          "mon": {
+            "type": "Monitor F5",
+            "key": [
+              "name",
+              "monitor"
+            ],
+            "name": "monitor",
+            "attrs": {
+              "Tipo": "tipo_monitor",
+              "Capa": "capa_monitor"
+            }
+          }
+        },
+        "rels": [
+          [
+            "pool",
+            "monitorizado por",
+            "mon",
+            {
+              "Lógica": "logica"
+            }
+          ]
+        ]
+      },
+      {
+        "metric": "f5_bigip_pool_member_monitor_info",
+        "computed": {
+          "member": {
+            "format": "{node}:{port}"
+          }
+        },
+        "cis": {
+          "mem": {
+            "type": "Miembro F5",
+            "key": [
+              "name",
+              "partition",
+              "pool",
+              "node",
+              "port"
+            ],
+            "name": "member"
+          },
+          "mon": {
+            "type": "Monitor F5",
+            "key": [
+              "name",
+              "monitor"
+            ],
+            "name": "monitor",
+            "attrs": {
+              "Tipo": "tipo_monitor",
+              "Capa": "capa_monitor"
+            }
+          }
+        },
+        "rels": [
+          [
+            "mem",
+            "monitorizado por",
+            "mon",
+            {
+              "Lógica": "logica"
+            }
+          ]
+        ]
+      },
+      {
+        "metric": "f5_bigip_node_monitor_info",
+        "cis": {
+          "node": {
+            "type": "Nodo F5",
+            "key": [
+              "name",
+              "partition",
+              "node"
+            ],
+            "name": "node"
+          },
+          "mon": {
+            "type": "Monitor F5",
+            "key": [
+              "name",
+              "monitor"
+            ],
+            "name": "monitor",
+            "attrs": {
+              "Tipo": "tipo_monitor",
+              "Capa": "capa_monitor"
+            }
+          }
+        },
+        "rels": [
+          [
+            "node",
+            "monitorizado por",
+            "mon",
+            {
+              "Lógica": "logica"
+            }
+          ]
+        ]
+      },
+      {
+        "source": "alerts",
+        "where": {
+          "pool": ".+",
+          "node": ".+",
+          "port": ".+"
+        },
+        "computed": {
+          "member": {
+            "format": "{node}:{port}"
+          }
+        },
+        "cis": {
+          "mem": {
+            "type": "Miembro F5",
+            "key": [
+              "name",
+              "partition",
+              "pool",
+              "node",
+              "port"
+            ],
+            "name": "member"
+          },
+          "pool": {
+            "type": "Pool F5",
+            "key": [
+              "name",
+              "partition",
+              "pool"
+            ],
+            "name": "pool"
+          }
+        },
+        "rels": [
+          [
+            "pool",
+            "balancea a",
+            "mem"
+          ]
+        ]
+      },
+      {
+        "metric": "vmware_vm_power_state",
+        "computed": {
+          "vcenter": [
+            "instance",
+            "^([^.:]+)"
+          ]
+        },
+        "cis": {
+          "vm": {
+            "type": "VM",
+            "key": [
+              "vcenter",
+              "vm_name"
+            ],
+            "name": "vm_name",
+            "attrs": {
+              "Último backup NetBackup": "NB_LAST_BACKUP"
+            }
+          },
+          "esx": {
+            "type": "ESXi",
+            "key": [
+              "host_name"
+            ],
+            "name": "host_name"
+          },
+          "cl": {
+            "type": "Clúster vSphere",
+            "key": [
+              "vcenter",
+              "cluster_name"
+            ],
+            "name": "cluster_name"
+          },
+          "ds": {
+            "type": "Datastore",
+            "key": [
+              "vcenter",
+              "ds_name"
+            ],
+            "name": "ds_name"
+          },
+          "vc": {
+            "type": "vCenter",
+            "key": [
+              "vcenter"
+            ],
+            "attrs": {
+              "Datacenter": "dc_name",
+              "Servidor": "instance"
+            }
+          }
+        },
+        "rels": [
+          [
+            "vm",
+            "se ejecuta en",
+            "esx"
+          ],
+          [
+            "vm",
+            "usa",
+            "ds"
+          ],
+          [
+            "esx",
+            "pertenece a",
+            "cl"
+          ],
+          [
+            "cl",
+            "pertenece a",
+            "vc"
+          ]
+        ]
+      },
+      {
+        "metric": "vmware_datastore_capacity_size",
+        "computed": {
+          "vcenter": [
+            "instance",
+            "^([^.:]+)"
+          ]
+        },
+        "cis": {
+          "ds": {
+            "type": "Datastore",
+            "key": [
+              "vcenter",
+              "ds_name"
+            ],
+            "name": "ds_name"
+          },
+          "vc": {
+            "type": "vCenter",
+            "key": [
+              "vcenter"
+            ],
+            "attrs": {
+              "Datacenter": "dc_name",
+              "Servidor": "instance"
+            }
+          }
+        },
+        "rels": [
+          [
+            "ds",
+            "pertenece a",
+            "vc"
+          ]
+        ]
+      },
+      {
+        "metric": "veeam_component_info",
+        "computed": {
+          "veeam_name": {
+            "format": "Veeam {site}"
+          }
+        },
+        "cis": {
+          "node": {
+            "type": "Nodo Veeam",
+            "key": [
+              "host"
+            ],
+            "name": "host",
+            "attrs": {
+              "Rol": "role",
+              "Sede": "site",
+              "Versión Veeam": "version"
+            }
+          },
+          "inf": {
+            "type": "Infraestructura Veeam",
+            "key": [
+              "site"
+            ],
+            "name": "veeam_name",
+            "attrs": {
+              "Sede": "site"
+            }
+          }
+        },
+        "rels": [
+          [
+            "node",
+            "pertenece a",
+            "inf"
+          ]
+        ]
+      },
+      {
+        "metric": "veeam_service_state",
+        "computed": {
+          "veeam_name": {
+            "format": "Veeam {site}"
+          }
+        },
+        "cis": {
+          "svc": {
+            "type": "Servicio Veeam",
+            "key": [
+              "host",
+              "name"
+            ],
+            "name": "name",
+            "attrs": {
+              "Descripción": "description"
+            },
+            "value_attr": "Estado",
+            "value_map": {
+              "1": "active",
+              "0": "inactive"
+            }
+          },
+          "node": {
+            "type": "Nodo Veeam",
+            "key": [
+              "host"
+            ],
+            "name": "host",
+            "attrs": {
+              "Rol": "role",
+              "Sede": "site"
+            }
+          },
+          "inf": {
+            "type": "Infraestructura Veeam",
+            "key": [
+              "site"
+            ],
+            "name": "veeam_name",
+            "attrs": {
+              "Sede": "site"
+            }
+          }
+        },
+        "rels": [
+          [
+            "svc",
+            "en",
+            "node"
+          ],
+          [
+            "node",
+            "pertenece a",
+            "inf"
+          ]
+        ]
+      },
+      {
+        "metric": "oceanstor_lun_info",
+        "where": {
+          "lun": ".*-VB-vbhard\\d+_\\d+"
+        },
+        "computed": {
+          "vbsite": [
+            "lun",
+            "^LUN_(\\d\\d)_"
+          ],
+          "vbtok": [
+            "lun",
+            ".*-VB-(vbhard\\d+)_\\d+$"
+          ],
+          "vbhost": {
+            "format": "s{vbsite}e-lsal-{vbtok}-adm"
+          },
+          "site": {
+            "from": "vbsite",
+            "map": {
+              "00": "CICA",
+              "01": "ZOCO"
+            }
+          },
+          "veeam_name": {
+            "format": "Veeam {site}"
+          },
+          "vbrole": {
+            "format": "hardened_repo"
+          }
+        },
+        "cis": {
+          "node": {
+            "type": "Nodo Veeam",
+            "key": [
+              "vbhost"
+            ],
+            "name": "vbhost",
+            "attrs": {
+              "Rol": "vbrole",
+              "Sede": "site"
+            }
+          },
+          "lun": {
+            "type": "LUN",
+            "key": [
+              "sede",
+              "lun"
+            ]
+          },
+          "inf": {
+            "type": "Infraestructura Veeam",
+            "key": [
+              "site"
+            ],
+            "name": "veeam_name",
+            "attrs": {
+              "Sede": "site"
+            }
+          }
+        },
+        "rels": [
+          [
+            "node",
+            "almacena en",
+            "lun"
+          ],
+          [
+            "node",
+            "pertenece a",
+            "inf"
+          ]
+        ],
+        "method": "nombre de la LUN"
+      },
+      {
+        "source": "alerts",
+        "where": {
+          "job": "(?i).*panos.*"
+        },
+        "computed": {
+          "fw_ip": {
+            "first": [
+              "exported_instance",
+              "instance"
+            ],
+            "regex": "^\\[?([^\\]:/]+)"
+          },
+          "fw_site": {
+            "from": "fw_ip",
+            "map_regex": {
+              "^10\\.47\\.208\\.1[12]$": "CICA",
+              "^10\\.47\\.208\\.13[12]$": "ZOCO"
+            },
+            "default": "Sin sede"
+          }
+        },
+        "cis": {
+          "fw": {
+            "type": "Firewall PA",
+            "key": [
+              "fw_ip"
+            ],
+            "name": "instance"
+          }
+        },
+        "rels": []
+      }
+    ],
+    "datastore_type": "Datastore",
+    "lun_type": "LUN",
+    "same_host_types": [
+      "ESXi",
+      "Host en cabina",
+      "VM",
+      "Nodo F5",
+      "Nodo Veeam"
+    ],
+    "technologies": {
+      "Cabinas": [
+        "Cabina",
+        "Pool",
+        "LUN",
+        "LUN group",
+        "Filesystem",
+        "NAS server",
+        "vStore",
+        "Host en cabina",
+        "Host group",
+        "Quota",
+        "Partición HA IBM",
+        "Componente de cabina"
+      ],
+      "Balanceadores": [
+        "Organismo F5",
+        "Organismo en sede",
+        "Tenant F5",
+        "Partición F5",
+        "Virtual server F5",
+        "Pool F5",
+        "Miembro F5",
+        "Nodo F5",
+        "Chasis F5",
+        "Chassis partition F5",
+        "Componente F5",
+        "Monitor F5"
+      ],
+      "Virtualización": [
+        "vCenter",
+        "Clúster vSphere",
+        "ESXi",
+        "VM",
+        "Datastore"
+      ],
+      "Backups": [
+        "Infraestructura Veeam",
+        "Nodo Veeam",
+        "Servicio Veeam"
+      ],
+      "Firewalls": [
+        "Clúster HA PA",
+        "Firewall PA",
+        "Vsys PA",
+        "Interfaz PA"
+      ]
+    },
+    "device_types": {
+      "Cabinas": [
+        "Cabina"
+      ],
+      "Balanceadores": [
+        "Organismo F5",
+        "Chasis F5"
+      ],
+      "Virtualización": [
+        "vCenter"
+      ],
+      "Backups": [
+        "Infraestructura Veeam"
+      ],
+      "Firewalls": [
+        "Clúster HA PA"
+      ]
+    },
+    "site_from_name_types": [
+      "Cabina",
+      "Chasis F5",
+      "Tenant F5",
+      "Organismo en sede",
+      "ESXi",
+      "VM",
+      "Datastore",
+      "Host en cabina",
+      "Infraestructura Veeam",
+      "Nodo Veeam",
+      "Clúster vSphere",
+      "Clúster HA PA",
+      "Firewall PA",
+      "Vsys PA"
+    ],
+    "nav_parent": {
+      "Tenant F5": "Organismo en sede",
+      "Virtual server F5": "Partición F5",
+      "Pool F5": "Partición F5",
+      "Nodo F5": "Partición F5",
+      "VM": "ESXi",
+      "LUN": "Pool",
+      "Host en cabina": "Host group",
+      "Monitor F5": "Tenant F5",
+      "Miembro F5": "Pool F5",
+      "Nodo Veeam": "Infraestructura Veeam",
+      "ESXi": "Clúster vSphere",
+      "Firewall PA": "Clúster HA PA",
+      "Vsys PA": "Clúster HA PA",
+      "Interfaz PA": "Firewall PA",
+      "Partición HA IBM": "Cabina",
+      "Componente de cabina": "Cabina"
+    },
+    "informative_relations": [
+      "monitorizado por",
+      "del organismo"
+    ],
+    "member_view": {
+      "Pool F5": {
+        "rel": "balancea a",
+        "node_rel": "apunta a",
+        "probe_rel": "monitorizado por"
+      }
+    },
+    "site_ignore_attrs": [
+      "Réplica con",
+      "Ubicación 1",
+      "Ubicación 2",
+      "Activa en",
+      "Preferida"
+    ]
+  },
+  "site_names": {
+    "S00": "CICA",
+    "S01": "ZOCO"
+  },
+  "site_patterns": {
+    "CICA": "(?i)(cica|^s00|[_-]s00)",
+    "ZOCO": "(?i)(zoco|^s01|[_-]s01)"
+  },
+  "cmdb_metrics_regex": ".*_info|.*capacity.*bytes|.*size_total_bytes|.*_total_mb|.*mapped.*|.*health.*|.*running_status|vsphere_.*_state|.*initiators.*|.*paths.*|vsphere_datastore_.*|vsphere_vm_datastore_info|.*_up|veeam_.*",
+  "exclude_jobs": [
+    "acosv2"
+  ],
+  "relations_file": {
+    "files": [
+      "relaciones.txt"
+    ],
+    "relation": "pasa por el firewall",
+    "prefixes": {
+      "Vsys_PA": {
+        "types": [
+          "Vsys PA"
+        ],
+        "name_prefixes": [
+          "FW_"
+        ]
+      },
+      "F5": {
+        "types": [
+          "Organismo F5",
+          "Organismo en sede",
+          "Tenant F5",
+          "Partición F5"
+        ],
+        "expand": [
+          "del organismo"
+        ]
+      }
+    }
+  }
+}

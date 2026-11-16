@@ -1,0 +1,50 @@
+# Tipos de relación. causal: propaga impacto del destino al origen.
+relations:
+  - name: pertenece a
+    causal: true
+  - name: se ejecuta en
+    causal: true
+  - name: usa
+    causal: true
+  - name: está en
+    causal: true
+  - name: servido por
+    causal: true
+  - name: miembro de
+    causal: true
+  - name: definido en
+    causal: true
+  - name: definida en
+    causal: true
+  - name: del organismo
+    causal: false
+    informative: true
+  - name: balancea a
+    causal: true
+  - name: apunta a
+    causal: true
+  - name: de
+    causal: true
+  - name: instalado en
+    causal: true
+  - name: en la partición
+    causal: true
+  - name: replicada en
+    causal: true
+  - name: sobre
+    causal: true
+  - name: contiene
+    causal: true
+  - name: monitorizado por
+    causal: false
+    informative: true
+  - name: en
+    causal: true
+  - name: almacena en
+    causal: true
+  - name: pasa por el firewall
+    causal: true
+  - name: es el mismo equipo que
+    causal: false
+    identity: true
+    description: El mismo equipo visto por exporters distintos (nombre normalizado).

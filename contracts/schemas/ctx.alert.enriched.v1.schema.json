@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vigia/contracts/ctx.alert.enriched.v1.schema.json",
+  "title": "es.vigia.ctx.alert.enriched.v1 — contexto de una alerta calculado por la plataforma",
+  "type": "object",
+  "required": ["alert_id", "fingerprint", "role", "ssii"],
+  "properties": {
+    "alert_id": {"type": "string"},
+    "fingerprint": {"type": "string"},
+    "ci": {"$ref": "#/$defs/ci", "description": "Elemento al que se asocia la alerta (ausente si no se pudo asociar)"},
+    "role": {"enum": ["causa", "sintoma", "aislada", "sin_ci"], "description": "Papel de la alerta en su incidencia"},
+    "incident": {
+      "type": "object",
+      "required": ["id", "affected"],
+      "properties": {
+        "id": {"type": "string"},
+        "root_ci": {"$ref": "#/$defs/ci"},
+        "score": {"type": "number", "minimum": 0, "maximum": 1},
+        "affected": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "ssii": {
+      "type": "array",
+      "description": "Sistemas de Información afectados (Vigía los cruza con sus servicios para decidir a quién avisar)",
+      "items": {
+        "type": "object",
+        "required": ["code", "state"],
+        "properties": {"code": {"type": "string"}, "state": {"$ref": "#/$defs/state"}},
+        "additionalProperties": false
+      }
+    },
+    "links": {
+      "type": "object",
+      "properties": {"ci": {"type": "string"}, "incident": {"type": "string"}},
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "ci": {
+      "type": "object",
+      "required": ["id", "class", "name"],
+      "properties": {
+        "id": {"type": "string"},
+        "class": {"type": "string"},
+        "name": {"type": "string"},
+        "technology": {"type": "string"},
+        "sites": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "state": {"enum": ["ok", "aviso", "degradado", "critico", "desconocido", "mantenimiento"]}
+  }
+}

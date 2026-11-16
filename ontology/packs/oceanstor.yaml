@@ -1,0 +1,210 @@
+# Reglas de Cabinas.
+pack: oceanstor
+technology: Cabinas
+description: Importado de config_junta.json. Revisar y documentar cada regla.
+rules:
+  - id: oceanstor-system-info
+    order: 110
+    metric: oceanstor_system_info
+    cis:
+      - alias: arr
+        class: Cabina
+        key:
+          - sede
+        name: name
+        set_name: true
+        attrs:
+          Modelo: model
+          Serie: serial
+          Ubicación: location
+          Versión: version
+          WWN: wwn
+  - id: oceanstor-pool-capacity-bytes
+    order: 120
+    metric: oceanstor_pool_capacity_bytes
+    cis:
+      - alias: pool
+        class: Pool
+        key:
+          - sede
+          - pool
+      - alias: arr
+        class: Cabina
+        key:
+          - sede
+    rels:
+      - from: pool
+        rel: está en
+        to: arr
+  - id: oceanstor-vstore-info
+    order: 130
+    metric: oceanstor_vstore_info
+    cis:
+      - alias: vst
+        class: vStore
+        key:
+          - sede
+          - vstore
+      - alias: arr
+        class: Cabina
+        key:
+          - sede
+    rels:
+      - from: vst
+        rel: está en
+        to: arr
+  - id: oceanstor-lun-info
+    order: 140
+    metric: oceanstor_lun_info
+    cis:
+      - alias: lun
+        class: LUN
+        key:
+          - sede
+          - lun
+        attrs:
+          Asignación: alloc_type
+          WWN: wwn
+      - alias: pool
+        class: Pool
+        key:
+          - sede
+          - pool
+      - alias: vst
+        class: vStore
+        key:
+          - sede
+          - vstore
+    rels:
+      - from: lun
+        rel: está en
+        to: pool
+      - from: lun
+        rel: pertenece a
+        to: vst
+  - id: oceanstor-filesystem-info
+    order: 150
+    metric: oceanstor_filesystem_info
+    cis:
+      - alias: fs
+        class: Filesystem
+        key:
+          - sede
+          - filesystem
+      - alias: pool
+        class: Pool
+        key:
+          - sede
+          - pool
+      - alias: vst
+        class: vStore
+        key:
+          - sede
+          - vstore
+    rels:
+      - from: fs
+        rel: está en
+        to: pool
+      - from: fs
+        rel: pertenece a
+        to: vst
+  - id: oceanstor-host-info
+    order: 160
+    metric: oceanstor_host_info
+    cis:
+      - alias: h
+        class: Host en cabina
+        key:
+          - sede
+          - host
+      - alias: hg
+        class: Host group
+        key:
+          - sede
+          - hostgroup
+      - alias: arr
+        class: Cabina
+        key:
+          - sede
+    rels:
+      - from: h
+        rel: miembro de
+        to: hg
+      - from: hg
+        rel: definido en
+        to: arr
+  - id: oceanstor-host-lun-info
+    order: 170
+    metric: oceanstor_host_lun_info
+    cis:
+      - alias: h
+        class: Host en cabina
+        key:
+          - sede
+          - host
+      - alias: lun
+        class: LUN
+        key:
+          - sede
+          - lun
+    rels:
+      - from: h
+        rel: usa
+        to: lun
+  - id: oceanstor-lungroup-member-info
+    order: 500
+    metric: oceanstor_lungroup_member_info
+    cis:
+      - alias: lg
+        class: LUN group
+        key:
+          - sede
+          - lungroup
+      - alias: lun
+        class: LUN
+        key:
+          - sede
+          - lun
+    rels:
+      - from: lg
+        rel: contiene
+        to: lun
+  - id: oceanstor-mapping-view-info
+    order: 510
+    metric: oceanstor_mapping_view_info
+    where:
+      kind: group
+    cis:
+      - alias: hg
+        class: Host group
+        key:
+          - sede
+          - hostgroup
+      - alias: lg
+        class: LUN group
+        key:
+          - sede
+          - lungroup
+    rels:
+      - from: hg
+        rel: usa
+        to: lg
+  - id: oceanstor-alertas-alertname
+    order: 520
+    source: alerts
+    where:
+      alertname: OceanStorFilesystem.*
+    cis:
+      - alias: fs
+        class: Filesystem
+        key:
+          - sede
+          - location
+      - alias: arr
+        class: Cabina
+        key:
+          - sede
+    rels:
+      - from: fs
+        rel: está en
+        to: arr

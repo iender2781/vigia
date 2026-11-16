@@ -1,0 +1,442 @@
+# Reglas de Cabinas.
+pack: flashsystem
+technology: Cabinas
+description: Importado de config_junta.json. Revisar y documentar cada regla.
+rules:
+  - id: ibm-flashsystem-system-info
+    order: 320
+    metric: ibm_flashsystem_system_info
+    where:
+      job: flashsystem
+    computed:
+      - name: vendor
+        format: IBM
+    cis:
+      - alias: arr
+        class: Cabina
+        key:
+          - instance
+        name: system_name
+        set_name: true
+        attrs:
+          Fabricante: vendor
+          Gestión: instance
+          ID sistema: system_id
+          Modelo: product_name
+          Topología: topology
+          Versión: code_level
+  - id: ibm-flashsystem-partnership-healthy
+    order: 330
+    metric: ibm_flashsystem_partnership_healthy
+    where:
+      job: flashsystem
+    computed:
+      - name: rep
+        format: "{partner} ({state}, {type})"
+    cis:
+      - alias: arr
+        class: Cabina
+        key:
+          - instance
+        attrs:
+          Réplica con: rep
+  - id: ibm-flashsystem-pool-healthy
+    order: 340
+    metric: ibm_flashsystem_pool_healthy
+    where:
+      job: flashsystem
+    cis:
+      - alias: pool
+        class: Pool
+        key:
+          - instance
+          - pool
+        attrs:
+          Easy Tier: easy_tier
+          Estado: status
+          Reducción de datos: data_reduction
+          Tipo: type
+      - alias: arr
+        class: Cabina
+        key:
+          - instance
+    rels:
+      - from: pool
+        rel: está en
+        to: arr
+  - id: ibm-flashsystem-volume-info
+    order: 350
+    metric: ibm_flashsystem_volume_info
+    where:
+      job: flashsystem
+    cis:
+      - alias: lun
+        class: LUN
+        key:
+          - instance
+          - volume
+        attrs:
+          Asignación: capacity_type
+          Espejo: mirrored
+          Grupo de volúmenes: volume_group
+          WWN: uid
+      - alias: pool
+        class: Pool
+        key:
+          - instance
+          - pool
+    rels:
+      - from: lun
+        rel: está en
+        to: pool
+  - id: ibm-flashsystem-volume-healthy
+    order: 360
+    metric: ibm_flashsystem_volume_healthy
+    where:
+      job: flashsystem
+    cis:
+      - alias: lun
+        class: LUN
+        key:
+          - instance
+          - volume
+        attrs:
+          Estado: status
+  - id: ibm-flashsystem-host-cluster-healthy
+    order: 370
+    metric: ibm_flashsystem_host_cluster_healthy
+    where:
+      job: flashsystem
+    cis:
+      - alias: hc
+        class: Host group
+        key:
+          - instance
+          - host_cluster
+        attrs:
+          Estado: status
+      - alias: arr
+        class: Cabina
+        key:
+          - instance
+    rels:
+      - from: hc
+        rel: definido en
+        to: arr
+  - id: ibm-flashsystem-host-healthy
+    order: 380
+    metric: ibm_flashsystem_host_healthy
+    where:
+      job: flashsystem
+    cis:
+      - alias: h
+        class: Host en cabina
+        key:
+          - instance
+          - host
+        attrs:
+          Estado: status
+          Partición: partition
+          Protocolo: protocol
+      - alias: hc
+        class: Host group
+        key:
+          - instance
+          - host_cluster
+      - alias: arr
+        class: Cabina
+        key:
+          - instance
+      - alias: part
+        class: Partición HA IBM
+        key:
+          - partition
+    rels:
+      - from: h
+        rel: miembro de
+        to: hc
+      - from: h
+        rel: definido en
+        to: arr
+      - from: h
+        rel: en la partición
+        to: part
+  - id: ibm-flashsystem-lun-mapping
+    order: 390
+    metric: ibm_flashsystem_lun_mapping
+    where:
+      job: flashsystem
+    cis:
+      - alias: h
+        class: Host en cabina
+        key:
+          - instance
+          - host
+      - alias: lun
+        class: LUN
+        key:
+          - instance
+          - volume
+    rels:
+      - from: h
+        rel: usa
+        to: lun
+        attrs:
+          SCSI id: scsi_id
+          Tipo de mapeo: mapping_type
+  - id: ibm-flashsystem-partition-info
+    order: 400
+    metric: ibm_flashsystem_partition_info
+    where:
+      job: flashsystem
+    cis:
+      - alias: part
+        class: Partición HA IBM
+        key:
+          - partition
+        attrs:
+          Activa en: active_system
+          Política HA: ha_policy
+          Preferida: preferred_system
+          Ubicación 1: location1_system
+          Ubicación 2: location2_system
+      - alias: arr
+        class: Cabina
+        key:
+          - instance
+    rels:
+      - from: part
+        rel: replicada en
+        to: arr
+  - id: ibm-flashsystem-partition-ha-state
+    order: 410
+    metric: ibm_flashsystem_partition_ha_state
+    where:
+      job: flashsystem
+    cis:
+      - alias: part
+        class: Partición HA IBM
+        key:
+          - partition
+        attrs:
+          Enlace: link_status
+          Estado HA: ha_status
+  - id: ibm-flashsystem-node-healthy
+    order: 420
+    metric: ibm_flashsystem_node_healthy
+    where:
+      job: flashsystem
+    computed:
+      - name: comp
+        format: Nodo {node}
+      - name: ctype
+        format: Nodo
+    cis:
+      - alias: c
+        class: Componente de cabina
+        key:
+          - instance
+          - comp
+        attrs:
+          Estado: status
+          I/O group: io_group
+          Nodo de configuración: config_node
+          Tipo: ctype
+      - alias: arr
+        class: Cabina
+        key:
+          - instance
+    rels:
+      - from: c
+        rel: de
+        to: arr
+  - id: ibm-flashsystem-enclosure-healthy
+    order: 430
+    metric: ibm_flashsystem_enclosure_healthy
+    where:
+      job: flashsystem
+    computed:
+      - name: comp
+        format: Enclosure {enclosure_id}
+      - name: ctype
+        format: Enclosure
+    cis:
+      - alias: c
+        class: Componente de cabina
+        key:
+          - instance
+          - comp
+        attrs:
+          Estado: status
+          Función: type
+          MTM: mtm
+          Serie: serial
+          Tipo: ctype
+      - alias: arr
+        class: Cabina
+        key:
+          - instance
+    rels:
+      - from: c
+        rel: de
+        to: arr
+  - id: ibm-flashsystem-psu-healthy
+    order: 440
+    metric: ibm_flashsystem_psu_healthy
+    where:
+      job: flashsystem
+    computed:
+      - name: comp
+        format: Fuente {enclosure_id}-{psu_id}
+      - name: ctype
+        format: Fuente de alimentación
+    cis:
+      - alias: c
+        class: Componente de cabina
+        key:
+          - instance
+          - comp
+        attrs:
+          Estado: status
+          Tipo: ctype
+      - alias: arr
+        class: Cabina
+        key:
+          - instance
+    rels:
+      - from: c
+        rel: de
+        to: arr
+  - id: ibm-flashsystem-battery-healthy
+    order: 450
+    metric: ibm_flashsystem_battery_healthy
+    where:
+      job: flashsystem
+    computed:
+      - name: comp
+        format: Batería {battery_id}
+      - name: ctype
+        format: Batería
+    cis:
+      - alias: c
+        class: Componente de cabina
+        key:
+          - instance
+          - comp
+        attrs:
+          Carga: charging_status
+          Estado: status
+          Tipo: ctype
+          Ubicación: location
+      - alias: arr
+        class: Cabina
+        key:
+          - instance
+    rels:
+      - from: c
+        rel: de
+        to: arr
+  - id: ibm-flashsystem-array-healthy
+    order: 460
+    metric: ibm_flashsystem_array_healthy
+    where:
+      job: flashsystem
+    computed:
+      - name: comp
+        format: Array {mdisk}
+      - name: ctype
+        format: Array RAID
+    cis:
+      - alias: c
+        class: Componente de cabina
+        key:
+          - instance
+          - comp
+        attrs:
+          Estado: status
+          Estado RAID: raid_status
+          RAID: raid_level
+          Tier: tier
+          Tipo: ctype
+      - alias: pool
+        class: Pool
+        key:
+          - instance
+          - pool
+    rels:
+      - from: pool
+        rel: sobre
+        to: c
+  - id: ibm-flashsystem-array-healthy-2
+    order: 470
+    metric: ibm_flashsystem_array_healthy
+    where:
+      job: flashsystem
+    computed:
+      - name: comp
+        format: Array {mdisk}
+    cis:
+      - alias: c
+        class: Componente de cabina
+        key:
+          - instance
+          - comp
+      - alias: arr
+        class: Cabina
+        key:
+          - instance
+    rels:
+      - from: c
+        rel: de
+        to: arr
+  - id: flashsystem-alertas-job
+    order: 530
+    source: alerts
+    where:
+      job: flashsystem
+    cis:
+      - alias: arr
+        class: Cabina
+        key:
+          - instance
+  - id: flashsystem-alertas-host-cluster-job
+    order: 540
+    source: alerts
+    where:
+      host_cluster: .+
+      job: flashsystem
+    cis:
+      - alias: hc
+        class: Host group
+        key:
+          - instance
+          - host_cluster
+      - alias: arr
+        class: Cabina
+        key:
+          - instance
+    rels:
+      - from: hc
+        rel: definido en
+        to: arr
+  - id: flashsystem-alertas-host-job
+    order: 550
+    source: alerts
+    where:
+      host: .+
+      job: flashsystem
+    cis:
+      - alias: h
+        class: Host en cabina
+        key:
+          - instance
+          - host
+      - alias: hc
+        class: Host group
+        key:
+          - instance
+          - host_cluster
+    rels:
+      - from: h
+        rel: miembro de
+        to: hc

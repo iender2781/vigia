@@ -1,0 +1,107 @@
+# Reglas de Cabinas.
+pack: unity
+technology: Cabinas
+description: Importado de config_junta.json. Revisar y documentar cada regla.
+rules:
+  - id: unity-lun-size-total-bytes
+    order: 80
+    metric: unity_lun_size_total_bytes
+    cis:
+      - alias: lun
+        class: LUN
+        key:
+          - array
+          - name
+      - alias: arr
+        class: Cabina
+        key:
+          - array
+        attrs:
+          Fabricante: vendor
+          Gestión: instance
+    rels:
+      - from: lun
+        rel: está en
+        to: arr
+  - id: unity-pool-size-total-bytes
+    order: 90
+    metric: unity_pool_size_total_bytes
+    cis:
+      - alias: pool
+        class: Pool
+        key:
+          - array
+          - name
+      - alias: arr
+        class: Cabina
+        key:
+          - array
+        attrs:
+          Fabricante: vendor
+          Gestión: instance
+    rels:
+      - from: pool
+        rel: está en
+        to: arr
+  - id: unity-filesystem-size-total-bytes
+    order: 100
+    metric: unity_filesystem_size_total_bytes
+    cis:
+      - alias: fs
+        class: Filesystem
+        key:
+          - array
+          - name
+      - alias: nas
+        class: NAS server
+        key:
+          - array
+          - nasserver
+      - alias: arr
+        class: Cabina
+        key:
+          - array
+        attrs:
+          Fabricante: vendor
+          Gestión: instance
+    rels:
+      - from: fs
+        rel: servido por
+        to: nas
+      - from: nas
+        rel: está en
+        to: arr
+  - id: unity-alertas-filesystem-job-path
+    order: 560
+    source: alerts
+    where:
+      filesystem: .+
+      job: unity
+      path: .+
+    cis:
+      - alias: q
+        class: Quota
+        key:
+          - array
+          - filesystem
+          - path
+      - alias: fs
+        class: Filesystem
+        key:
+          - array
+          - filesystem
+    rels:
+      - from: q
+        rel: de
+        to: fs
+  - id: unity-alertas-array-job
+    order: 570
+    source: alerts
+    where:
+      array: .+
+      job: unity
+    cis:
+      - alias: arr
+        class: Cabina
+        key:
+          - array
